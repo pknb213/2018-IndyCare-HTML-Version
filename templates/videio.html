@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Neuomeka Inventory Management">
+    <link rel="shortcut icon" href="../static/img/favicon.png">
+    <title>Neuromeka Inventory Management</title>
+    <!-- Icons -->
+    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/css/simple-line-icons.css" rel="stylesheet">
+    <!-- Premium Icons -->
+    <link href="../static/css/glyphicons.css" rel="stylesheet">
+    <link href="../static/css/glyphicons-filetypes.css" rel="stylesheet">
+    <link href="../static/css/glyphicons-social.css" rel="stylesheet">
+    <!-- Main styles for this application -->
+    <link href="../static/css/style.css" rel="stylesheet">
+    <!-- Jquery -->
+    <script src="../static/js/libs/jquery.min.js"></script>
+</head>
+<body>
+    <label>Video Clip</label>
+    <video id="clip" width="100%" controls loop muted autoplay></video>
+    <div id="clip_msg"></div>
+</body>
+<script type="text/javascript">
+    $(document).ready(()=>{
+       load_clip();
+    });
+    function load_clip() {
+           console.log("Started Ajax");
+           $.ajax({
+               type: "GET",
+               url: "/clip/check",
+               success: (res)=>{
+                   console.log("Res : " + res);
+                   let video = document.getElementById("clip");
+                   let msg = document.getElementById('clip_msg');
+                   if (res==='ready'){
+                       video.style.display = 'block';
+                       msg.style.display = 'none';
+                       video.setAttribute('src', '/static/Chronograf.mp4');
+                       console.log("Clip : ready");
+                   }else if(res==='ok') {
+                       video.style.display = 'block';
+                       msg.style.display = 'none';
+                       video.setAttribute('src', '/clip/1?ts=1');
+                       console.log("Clip : ok");
+                   }else{
+                       $("#clip_msg").append("<p> Please, Refresh</p>");
+                        video.style.display = 'block';
+                        msg.style.display = 'block';
+                        video.setAttribute('poster', '{{ url_for('static', filename='img/bk.jpg') }}');
+                        console.log("Blackbox load : %s", res);
+                   }
+               },
+               error: (request, status, error)=>{
+                    let video = document.getElementById("black_box_clip");
+                    let msg = document.getElementById("black_box_message");
+                    video.style.display = 'none';
+                    msg.style.display = 'block';
+                    $('#clip_msg').append("<p>" + status + "</p>");
+                    console.log("Load Black Box Fail " + request + status + error);
+               }
+           });
+       }
+</script>
+
+<!-- Bootstrap and necessary plugins -->
+<script src="../static/js/libs/tether.min.js"></script>
+<script src="../static/js/libs/bootstrap.min.js"></script>
+<script src="../static/js/libs/pace.min.js"></script>
+
+<!-- GenesisUI main scripts -->
+<script src="../static/js/app.js"></script>
+
+<!-- Plugins and scripts required by this views -->
+<script src="../static/js/libs/toastr.min.js"></script>
+<script src="../static/js/libs/gauge.min.js"></script>
+<script src="../static/js/libs/moment.min.js"></script>
+<script src="../static/js/libs/daterangepicker.js"></script>
+<script src="../static/js/libs/Chart.min.js"></script>
+<script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>
+
+<!-- Custom scripts required by this view -->
+{#<script src="../static/js/views/main.js"></script>#}
+
+</html>
