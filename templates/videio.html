@@ -27,13 +27,14 @@
 </body>
 <script type="text/javascript">
     $(document).ready(()=>{
-       load_clip();
+        load_clip();
     });
     function load_clip() {
            console.log("Started Ajax");
+           const sn = 'D1234';
            $.ajax({
                type: "GET",
-               url: "/clip/check",
+               url: "/clip/" + sn + "/check",
                success: (res)=>{
                    console.log("Res : " + res);
                    let video = document.getElementById("clip");
@@ -46,7 +47,7 @@
                    }else if(res==='ok') {
                        video.style.display = 'block';
                        msg.style.display = 'none';
-                       video.setAttribute('src', '/clip/1?ts=1');
+                       video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
                        console.log("Clip : ok");
                    }else{
                        $("#clip_msg").append("<p> Please, Refresh</p>");
