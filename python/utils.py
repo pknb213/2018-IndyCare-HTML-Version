@@ -1,6 +1,6 @@
 import os, sys
 from flask import Flask, render_template, send_from_directory, Response
-import time
+import time, glob
 from datetime import datetime
 from redis import Redis, RedisError
 
@@ -12,7 +12,7 @@ app.config.update(
     ROBOT_DATA_WAIT_TIMEOUT = 10
 )
 
-cache = Redis("localhost")
+cache = Redis("13.209.42.91")
 cache.flushdb()
 print(cache.keys())
 print(cache.hkeys('D11924I07T02'))
