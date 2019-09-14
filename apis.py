@@ -66,6 +66,10 @@ def clip_cam(sn, cam):
     print("Clip Path : ", clip_path)
 
     t0 = t1 = datetime.now()
+
+    # SSE test
+    sse.publish({"message": str(cam)}, channel=sn + '_clip')
+
     # cache.hset(sn, 'clip', 0)  # 클립이 0이면 Waiting 반복, -1이면 Fail, 0보다 크면 영상 존재
     print("hget SN (clip) : ", cache.hget(sn, 'clip'))
     while t1.timestamp() - t0.timestamp() <= app.config['ROBOT_DATA_WAIT_TIMEOUT']:
