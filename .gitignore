@@ -1,7 +1,6 @@
 *.log
 *.bak
 *.pyc
-
 .__pycache__/
 .idea/
 .upload/

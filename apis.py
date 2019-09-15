@@ -15,12 +15,11 @@ def clip_check(sn):
 
     # todo : Reporter 함수
     def get_latest_clip():
-        check_duration = 0.5
+        check_duration = 1
         timeout = 10
         while timeout > 0:
-            clips = glob.glob(os.path.join(os.getcwd(), 'clips/')  + '*.mp4')
+            clips = glob.glob(os.path.join(os.getcwd(), 'clips/') + '*.mp4')
             if len(clips) > 0:
-                print(clips)
                 return clips[0]
             time.sleep(check_duration)
             timeout -= check_duration
@@ -39,7 +38,7 @@ def clip_check(sn):
     else:
         file_name = get_latest_clip().split('\\')[-1]
     clip_path = get_latest_clip()
-    print(clip_path)
+    print("< Check > Clip Path : ", clip_path)
     # added file.save
     cache.hset(sn, 'clipname', file_name)
     print("hset : ", sn, 'clipname', file_name)
