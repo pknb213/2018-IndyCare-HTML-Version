@@ -21,14 +21,36 @@
     <script src="../static/js/libs/jquery.min.js"></script>
 </head>
 <body>
-    <label>Video Clip</label>
-    <video id="clip" width="100%" controls loop muted autoplay></video>
-    <div id="clip_msg"></div>
+    <div class="container-fluid">
+        <div class="col-lg-6">
+            <label>Video Clip</label>
+            <video id="clip" width="100%" controls loop muted autoplay></video>
+            <div id="clip_msg"></div>
+        </div>
+        <div class="col-lg-6">
+            <table id="dataTable" width="100%" class="table table-striped table-lightfont">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Kind</th>
+                        <th>Save</th>
+                    </tr>
+                </thead>
+            </table>
+            </div>
+    </div>
 </body>
 <script type="text/javascript">
     $(document).ready(()=>{
         load_clip();
+        setInterval(load_clip, 30000);
     });
+    function get_sn) {
+        $.ajax({
+            type: "GET",
+            url: "/search/sn"
+        });
+    }
     function load_clip() {
            console.log("Started Ajax");
            const sn = 'D1234';
@@ -47,13 +69,15 @@
                    }else if(res==='ok') {
                        video.style.display = 'block';
                        msg.style.display = 'none';
+                       video.setAttribute('poster', '/clip/poster');
                        video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
+                       console.log(video)
                        console.log("Clip : ok");
                    }else{
                        $("#clip_msg").append("<p> Please, Refresh</p>");
                         video.style.display = 'block';
                         msg.style.display = 'block';
-                        video.setAttribute('poster', '{{ url_for('static', filename='img/bk.jpg') }}');
+                        video.setAttribute('src', '{{ url_for('static', filename='img/bk.jpg') }}');
                         console.log("Blackbox load : %s", res);
                    }
                },
@@ -67,6 +91,36 @@
                }
            });
        }
+
+       // SSE 코드
+       let ev_source = new EventSource("{{url_for('sse.stream')}}?channel={{sn}}_ev");
+        ev_source.addEventListener('message', function (event) {
+            $("#eventHistoryTable").DataTable().ajax.reload();
+        }, false);
+        ev_source.addEventListener('error', function (event) {
+            //alert("Failed to connect to event stream");
+        }, false);
+
+</script>
+
+<script type="text/javascript">
+    $.fn.dataTable.ext.errMode = 'none';
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            "processing": true,
+            ajax: {
+                "url": "/",
+                "type": "GET",
+                "dataSrc": "",
+            },
+            columns: [
+                {"data": "time"},
+                {"data": "kind"},
+                {"data": "data"}
+            ],
+            order: [[0, 'desc']]
+        });
+    });
 </script>
 
 <!-- Bootstrap and necessary plugins -->

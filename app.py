@@ -1,4 +1,7 @@
-from utils import *
+import sys, os
+sys.path.append(os.getcwd() + os.path.sep + 'python')
+sys.path.append(os.getcwd() + os.path.sep)
+from utils import app
 from apis import *
 from views import *
 
