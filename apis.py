@@ -7,24 +7,17 @@ from utils import *
 #     cache.hset(sn, 'clip', 0 if cam else -1)  # cam 값이 있으면 0, 없으면 -1
 
 
-@app.route("/clip/<sn>/check")
+@app.route("/ping")
+def ping():
+    print("Pong")
+    return 1
+
+
+@app.route("/clip/<sn>/check", methods=["GET", "POST"])
 def clip_check(sn):
     res = 'ok'
     #res = 'ready'
     # res = '1'
-
-    # todo : Reporter 함수
-    def get_latest_clip():
-        check_duration = 1
-        timeout = 10
-        while timeout > 0:
-            clips = glob.glob(os.path.join(os.getcwd(), 'clips/') + '*.mp4')
-            if len(clips) > 0:
-                return clips[0]
-            time.sleep(check_duration)
-            timeout -= check_duration
-        print('no file...')
-        return None
 
     # sn (clip) set -1 :  -1은 file이 없을 떄 (None)
     # file_name = 'Chronograf.mp4'
@@ -32,12 +25,24 @@ def clip_check(sn):
 
     # todo : 여기다 request.file을 넣어야 함
 
-    print("Get Lastest Clip : ", get_latest_clip())
-    if get_latest_clip() is None:
-        file_name = 'No FIle'
+    print("File : ", request.files)
+    if request.files:
+        if request.files['file'].name == 'No Camera':
+            cache.hset(sn, 'clip', -1)
+            return res
     else:
-        file_name = get_latest_clip().split('\\')[-1]
-    clip_path = get_latest_clip()
+        if not cache.exists('clipname', 'clip'):
+            cache.hset(sn, 'clipname', 'No Clip')
+            print("hset : ", sn, 'clipname', 'No Clip')
+            time.sleep(0.02)  # for scheduling
+            cache.hset(sn, 'clip', -1)
+            print("hset : ", sn, 'clip', -1)
+            return res
+
+    file_name = request.files['file'].filename
+    clip_path = os.path.join(os.getcwd(), 'clips', request.files['file'].filename)
+    request.files['file'].save(clip_path)
+
     print("< Check > Clip Path : ", clip_path)
     # added file.save
     cache.hset(sn, 'clipname', file_name)
@@ -64,13 +69,17 @@ def clip_cam(sn, cam):
     clip_path = os.path.join(os.getcwd(), 'clips')
     print("Clip Path : ", clip_path)
 
-    t0 = t1 = datetime.now()
-
-    # SSE test
-    sse.publish({"message": str(cam)}, channel=sn + '_clip')
+    print(datetime.now().timestamp() - float(cache.hget(sn, 'clip')))
+    if not os.path.exists(clip_path) or \
+        'clip'.encode('utf-8') not in cache.hkeys(sn) or \
+            datetime.now().timestamp() - float(cache.hget(sn, 'clip')) > 30:
+        print("Clip을 SSE에게 요청하겠사와요")
+        cache.hset(sn, 'clip', 0)
+        sse.publish({"message": str(cam)}, channel=sn + '_clip')
 
     # cache.hset(sn, 'clip', 0)  # 클립이 0이면 Waiting 반복, -1이면 Fail, 0보다 크면 영상 존재
     print("hget SN (clip) : ", cache.hget(sn, 'clip'))
+    t0 = t1 = datetime.now()
     while t1.timestamp() - t0.timestamp() <= app.config['ROBOT_DATA_WAIT_TIMEOUT']:
         st = float(cache.hget(sn, 'clip'))
 
@@ -81,7 +90,9 @@ def clip_cam(sn, cam):
             print("Succ")
             print(cache.keys())
             print(cache.hgetall('D1234'))
-            return send_from_directory(clip_path, cache.hget(sn, 'clipname').decode('utf-8'))
+            res = send_from_directory(clip_path, cache.hget(sn, 'clipname').decode('utf-8'))
+            print("Res : ", res)
+            return res
 
         time.sleep(1)
         t1 = datetime.now()
@@ -95,64 +106,32 @@ def clip_poster():
     clip_path = os.path.join(os.getcwd(), 'clips')
     return send_from_directory(clip_path, "pung.jpg")
 
-'''
-# 원래 카메라 확인 함수
-@app.route("/clips/<sn>/check")
-def get_blackbox_camera_check(sn):
-    return Robot.check_camera(sn)
-    
-def check_camera(sn):
-    r_log('check camera', sn, 'clip', cache.hget(sn, 'clip'))
-    hget_clip = cache.hget(sn, 'clip')
-    if not Robot.is_connected(sn):
-        return Response("Not connected")
-    elif float(hget_clip) < 0:  # 누가 clip을 설정해 주지? 카메라가 없는 경우, 카메라가 고장난 경우, ... 그냥 카메라 상태를 report하게 할까?
-        cache_set(sn, 'clip', 0)
-        print("No Camera")
-        return Response("No camera")
-    else:
-        print("OK")
-        return Response('OK')
-        
-#  Test Code 
-@app.route("/clips/<sn>")
-def get_blackbox_clip(sn):
-    print(">> get_blackbox_clip")
-    return Robot.get_blackbox_clip(sn, 1)
 
-@app.route("/clips/<sn>/<cam>")
-def get_blackbox_clip_cam(sn, cam):
-    print(">> get_blackbox_clip_cam %s" % cam)
-    return Robot.get_blackbox_clip(sn, cam)
+# todo : Event Function
+@app.route("/event", methods=["POST"])
+def add_event():
+    print(request.json)
+    # todo : DB에 저장 ( 테이블 만들기 위한 용도 ), 여기서 Javascript에게 SSE로 테이블 로딩 할 수 있음
+    return Response('ok')
 
-def get_blackbox_clip(sn, cam=1):
-    r_log('get clip', sn, cam)
-    clippath = get_clip_path(clipname(sn))
-    print("GET Clip Nmae : %s" % clipname(sn))
-    print("GET Clip Path : %s" % clippath)
-    if not path.exists(clippath) or \
-            'clip'.encode('utf-8') not in cache.hkeys(sn) or \
-            datetime.now().timestamp() - float(cache.hget(sn, 'clip')) > CLIP_INVALID_TIME:
-        cache_set(sn, 'clip', 0)
-        print('sse event : clip', str(cam))
-        sse.publish({"message": str(cam)}, channel=sn + '_clip')
-    t1 = t0 = datetime.now()
-    while t1.timestamp() - t0.timestamp() <= app.config['ROBOT_DATA_WAIT_TIMEOUT']:
-        st = float(cache.hget(sn, 'clip'))
-        # 영상이 제대로 저장되면 시간으로 clip field의 값이 되므로 st < 0이면 영상 없음
-        if st < 0:
-            return Response('No camera')
-        if st > 0:
-            clip = clipname(sn)
-            print('Send clip...', get_clip_path(clip))
-            res = send_from_directory(app.config['BLACKBOX_CLIP_PATH'], clip)
-            print('res:', res)
-            return res
-        time.sleep(ROBOT_DATA_POLLING)
-        t1 = datetime.now()
-        print('clip waiting...', t1.timestamp() - t0.timestamp())
 
-    return Response('Error')
+@app.route("/list/events")
+def get_event_list_for_datatable():
+    # todo : DataTable에 출력할 용도인 API
+    return 1
 
-'''
 
+@app.route("/")
+def get_event_file():
+    # todo : 버튼 클릭했을 때, 불려지는 API로 그리고 나서 SSE로 reporter에게 파일 달라고 함
+    return 1
+
+
+@app.route("/", methods=["POST"])
+def new_event_file_from_reporter():
+    # todo : Reporter의 SSE가 수행한 후, POST 파일 받는 API, request.file 개발
+    return 1
+
+
+# todo 근데 add event에서 uploader에게 파일 보내라고 하면 끝 아님? 그러면 get event file 필요없을거 같은데
+# todo 아니면 용도를 버튼 api로만 바꾸든가, 버튼은 내부 저장소의 파일 전송하는 용도로만 쓰고, 총 api 수는 같네.

@@ -1,5 +1,5 @@
 import os, sys
-from flask import Flask, render_template, send_from_directory, Response
+from flask import Flask, render_template, send_from_directory, Response, request
 import time, glob
 from datetime import datetime
 from redis import Redis, RedisError
@@ -11,7 +11,7 @@ app.config.update(
     DEBUG=False,
     SCREATE_KEY='secret_xxx',
     ROBOT_DATA_WAIT_TIMEOUT = 10,
-    REDIS_URL = "redis://13.209.42.91"
+    REDIS_URL="redis://13.209.42.91"
 )
 app.register_blueprint(sse, url_prefix='/stream')
 

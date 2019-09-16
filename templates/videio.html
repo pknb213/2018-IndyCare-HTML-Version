@@ -45,7 +45,7 @@
         load_clip();
         setInterval(load_clip, 30000);
     });
-    function get_sn) {
+    function get_sn() {
         $.ajax({
             type: "GET",
             url: "/search/sn"
@@ -71,7 +71,7 @@
                        msg.style.display = 'none';
                        video.setAttribute('poster', '/clip/poster');
                        video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
-                       console.log(video)
+                       console.log(video);
                        console.log("Clip : ok");
                    }else{
                        $("#clip_msg").append("<p> Please, Refresh</p>");
@@ -104,7 +104,7 @@
 </script>
 
 <script type="text/javascript">
-    $.fn.dataTable.ext.errMode = 'none';
+    /*$.fn.dataTable.ext.errMode = 'none';
     $(document).ready(function () {
         $('#dataTable').DataTable({
             "processing": true,
@@ -120,7 +120,7 @@
             ],
             order: [[0, 'desc']]
         });
-    });
+    });*/
 </script>
 
 <!-- Bootstrap and necessary plugins -->
