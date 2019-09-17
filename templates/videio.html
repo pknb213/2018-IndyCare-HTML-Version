@@ -31,13 +31,15 @@
             <table id="dataTable" width="100%" class="table table-striped table-lightfont">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Kind</th>
-                        <th>Save</th>
+                        <th>Idx</th>
+                        <th>Json</th>
+                        <th>File</th>
+                        <th>SN</th>
+                        <th>Time</th>
                     </tr>
                 </thead>
             </table>
-            </div>
+        </div>
     </div>
 </body>
 <script type="text/javascript">
@@ -104,23 +106,25 @@
 </script>
 
 <script type="text/javascript">
-    /*$.fn.dataTable.ext.errMode = 'none';
+    // $.fn.dataTable.ext.errMode = 'none';
     $(document).ready(function () {
         $('#dataTable').DataTable({
             "processing": true,
             ajax: {
-                "url": "/",
+                "url": "/list/events",
                 "type": "GET",
                 "dataSrc": "",
             },
             columns: [
-                {"data": "time"},
-                {"data": "kind"},
-                {"data": "data"}
+                {"data": "idx"},
+                {"data": "json"},
+                {"data": "file"},
+                {"data": "sn"},
+                {"data": "occurrence_time"}
             ],
             order: [[0, 'desc']]
         });
-    });*/
+    });
 </script>
 
 <!-- Bootstrap and necessary plugins -->

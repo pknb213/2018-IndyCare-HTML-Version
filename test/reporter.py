@@ -24,7 +24,7 @@ def reporter(q):
                 # 여기서 바로 file로 event log를 보내도 된다고 생각 함
                 # date = datetime.datetime.strptime(log_file[12:-4], '%m-%d-%Y-%H-%M-%S')
                 # print(date)
-                s.post(URL + '/event', json={'time': datetime.datetime.now(), 'code': 1, 'log': EventFiles.latest_log})
+                s.post(URL + '/event', json={'time': datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'code': 1, 'log': EventFiles.latest_log})
 
 
 def event_log_uploader():

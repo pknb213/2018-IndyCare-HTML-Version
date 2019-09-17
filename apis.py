@@ -110,24 +110,31 @@ def clip_poster():
 # todo : Event Function
 @app.route("/event", methods=["POST"])
 def add_event():
-    print(request.json)
     # todo : DB에 저장 ( 테이블 만들기 위한 용도 ), 여기서 Javascript에게 SSE로 테이블 로딩 할 수 있음
+    print(request.json)
+    sql = "INSERT INTO events(json, sn) " \
+          "VALUES(\"%s\", \"%s\")" % (str(request.json), 'D1234')
+    MySQL.mysql_insert(sql)
+    load_sse_command('D1234')
     return Response('ok')
 
 
 @app.route("/list/events")
 def get_event_list_for_datatable():
     # todo : DataTable에 출력할 용도인 API
-    return 1
+    sql = "SELECT idx, json, file, sn, occurrence_time FROM events"
+    res = MySQL.mysql_select(sql, True)
+
+    return res
 
 
-@app.route("/")
+@app.route("/1")
 def get_event_file():
     # todo : 버튼 클릭했을 때, 불려지는 API로 그리고 나서 SSE로 reporter에게 파일 달라고 함
     return 1
 
 
-@app.route("/", methods=["POST"])
+@app.route("/2", methods=["POST"])
 def new_event_file_from_reporter():
     # todo : Reporter의 SSE가 수행한 후, POST 파일 받는 API, request.file 개발
     return 1
