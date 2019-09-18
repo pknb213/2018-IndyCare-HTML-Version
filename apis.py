@@ -13,6 +13,15 @@ def ping():
     return 1
 
 
+@app.route("/robots")
+def robots():
+    sql = "SELECT sn, company, site FROM robots"
+    res = MySQL.mysql_select(sql)
+    for i in res:
+        i['Deploy'] = "<a href=/deployment/%s>Deployment</a>" % i['sn']
+    return jsonify(res)
+
+
 @app.route("/clip/<sn>/check", methods=["GET", "POST"])
 def clip_check(sn):
     res = 'ok'
@@ -88,10 +97,9 @@ def clip_cam(sn, cam):
             return Response("Fail")
         if st > 0:
             print("Succ")
-            print(cache.keys())
-            print(cache.hgetall('D1234'))
-            res = send_from_directory(clip_path, cache.hget(sn, 'clipname').decode('utf-8'))
-            print("Res : ", res)
+            print(cache.hgetall(sn))
+            res = send_from_directory(clip_path, cache.hget(sn, 'clipname').decode('utf-8'),
+                                      as_attachment=True, attachment_filename=cache.hget(sn, 'clipname').decode('utf-8'))
             return res
 
         time.sleep(1)
@@ -111,34 +119,73 @@ def clip_poster():
 @app.route("/event", methods=["POST"])
 def add_event():
     # todo : DB에 저장 ( 테이블 만들기 위한 용도 ), 여기서 Javascript에게 SSE로 테이블 로딩 할 수 있음
-    print(request.json)
+    print("Insert Mysql : ", request.json)
     sql = "INSERT INTO events(json, sn) " \
           "VALUES(\"%s\", \"%s\")" % (str(request.json), 'D1234')
     MySQL.mysql_insert(sql)
-    load_sse_command('D1234')
+    load_sse_command('D1234', '_ev')
     return Response('ok')
 
 
-@app.route("/list/events")
-def get_event_list_for_datatable():
+@app.route("/list/events/<sn>")
+def get_event_list_for_datatable(sn):
     # todo : DataTable에 출력할 용도인 API
-    sql = "SELECT idx, json, file, sn, occurrence_time FROM events"
+    sql = "SELECT idx, json, file, sn, occurrence_time FROM events WHERE sn=\"%s\"" % sn
     res = MySQL.mysql_select(sql, True)
 
-    return res
+    if not res: return jsonify('')
+    for i in res:
+        a = i['json'].replace("\'", "\"")
+        a = a.replace("\\", "\\\\")
+        a = json.loads(a)
+        a = a['log'].split('\\')
+        i['down'] = '<a class=c_hyper href=/file/event/%s/%s>Download</a>' % (a[-1], i['sn'])
+
+    return jsonify(res)
 
 
-@app.route("/1")
-def get_event_file():
+@app.route("/file/event/<filename>/<sn>", methods=["GET", "POST"])
+def get_event_file(filename, sn):
     # todo : 버튼 클릭했을 때, 불려지는 API로 그리고 나서 SSE로 reporter에게 파일 달라고 함
-    return 1
+    print("File : ", request.files)
+    clip_path = os.path.join(os.getcwd(), 'clips')
+    if request.files:
+        file_name = request.files['file'].filename
+        request.files['file'].save(os.path.join(clip_path, file_name))
+        cache.hset(sn, 'event_log', 1)
+        cache.hset(sn, 'log_name', file_name)
+    else:
+        cache.hset(sn, 'event_log', 0)
+        print("Log를 요청하겠사와요")
+        load_sse_command(sn, '_event_log', {'sn': sn, 'filename': filename})
+
+    t1 = t0 = datetime.now()
+    while t1.timestamp() - t0.timestamp() <= app.config['ROBOT_DATA_WAIT_TIMEOUT']:
+        st = int(cache.hget(sn, 'event_log'))
+        if st < 0:
+            print("Fail")
+            return Response("No Log")
+        if st > 0:
+            print("Succ")
+            print(cache.hgetall(sn))
+            return send_from_directory(clip_path, cache.hget(sn, 'log_name').decode('utf-8'),
+                                       as_attachment=True, attachment_filename=cache.hget(sn, 'log_name').decode('utf-8'))
+
+        time.sleep(1)
+        t1 = datetime.now()
+        print('Log Waiting', t1.timestamp() - t0.timestamp())
+    return Response('Error')
 
 
-@app.route("/2", methods=["POST"])
-def new_event_file_from_reporter():
-    # todo : Reporter의 SSE가 수행한 후, POST 파일 받는 API, request.file 개발
-    return 1
+@app.route("/opdata", methods=["POST"])
+def opdate():
+    print(request.json)
+    sql = "INSERT INTO opdatas(y) VALUES (\"%s\") " % request.json['y']
+    MySQL.mysql_insert(sql)
+    return Response('ok')
 
 
-# todo 근데 add event에서 uploader에게 파일 보내라고 하면 끝 아님? 그러면 get event file 필요없을거 같은데
-# todo 아니면 용도를 버튼 api로만 바꾸든가, 버튼은 내부 저장소의 파일 전송하는 용도로만 쓰고, 총 api 수는 같네.
+@app.route("/opdata2")
+def opdata2():
+
+    return jsonify({"ok":"yes"})

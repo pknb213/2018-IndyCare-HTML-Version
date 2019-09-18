@@ -8,6 +8,10 @@ class EventFiles:
     latest_log = ''
 
     @classmethod
+    def get_directory_path(cls):
+        return EventFiles.EVENT_DIRECTORY
+
+    @classmethod
     def get_latest_clip(cls):
         check_duration = 1
         timeout = 10
@@ -17,15 +21,22 @@ class EventFiles:
                 return clips[0]
             time.sleep(check_duration)
             timeout -= check_duration
-        print('no file...')
+        print('no clip file...')
         return None
 
     @classmethod
     def get_latest_log(cls):
-        logs = glob.glob(EventFiles.EVENT_DIRECTORY + '*.tgz')
-        if len(logs) == 0: return ''
-        logs.sort(key=os.path.getmtime, reverse=True)
-        return logs[0]
+        check_duration = 1
+        timeout = 10
+        while timeout > 0:
+            logs = glob.glob(EventFiles.EVENT_DIRECTORY + '*.tgz')
+            if len(logs) > 0:
+                logs.sort(key=os.path.getmtime, reverse=True)
+                return logs[0]
+            time.sleep(check_duration)
+            timeout -= check_duration
+        print('no log file...')
+        return ''
 
     @classmethod
     def check_if_new_log(cls):

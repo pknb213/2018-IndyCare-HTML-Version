@@ -1,22 +1,60 @@
 import os, sys
-from flask import Flask, render_template, send_from_directory, Response, request
+from flask import Flask, render_template, send_from_directory, send_file, Response, request, jsonify, redirect, url_for
 import time, glob, json
 import pymysql
 from datetime import datetime
 from redis import Redis, RedisError
 from flask_sse import sse
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
 
+# REDIS_URL = '13.209.42.91'
+REDIS_URL = 'localhost'
 app = Flask(__name__, template_folder=os.getcwd()+'/templates', static_folder=os.getcwd()+'/static')
 app.config.update(
     DEBUG=False,
     SCREATE_KEY='secret_xxx',
     ROBOT_DATA_WAIT_TIMEOUT = 10,
-    REDIS_URL="redis://13.209.42.91"
+    REDIS_URL="redis://%s" % REDIS_URL
 )
 app.register_blueprint(sse, url_prefix='/stream')
 
-cache = Redis(host="13.209.42.91", port=6379, db=0)
+app.jinja_env.globals.update(current_user=current_user)
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = "login"
+
+
+class Robot(UserMixin):
+    def __init__(self, sn):
+        self.id = sn
+        self.pwd = sn
+
+
+def check_robot(__id, __pwd):
+    sql = "SELECT sn FROM robots WHERE sn=\"%s\" % __id"
+    if MySQL.mysql_select(sql, False):
+        return __id == __pwd
+
+
+@login_manager.user_loader
+def load_user(id):
+    return Robot(id)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == 'GET':
+        return render_template("home.html")
+    if current_user.is_authenticated: return redirect(url_for("deployment"))
+    check_robot(request.form['id'], request.form['pwd'])
+    user = Robot(request.form['id'])
+    login_user(user)
+    return 'LOGIN'
+
+
+cache = Redis(host=REDIS_URL, port=6379, db=0)
 cache.flushdb()
 print(cache.keys())
 print(cache.hkeys('D11924I07T02'))
@@ -27,8 +65,10 @@ INTERNAL_DATABASE = True
 DictCursor = pymysql.cursors.DictCursor
 
 
-def load_sse_command(sn):
-    sse.publish({'message': 1}, channel=sn+'_ev')
+def load_sse_command(sn, tag, __dict=None):
+    if __dict is None:
+        __dict = {'message': 1}
+    sse.publish(__dict, channel=sn + tag)
 
 
 class MySQL:
@@ -65,7 +105,7 @@ class MySQL:
                             res = cursor.fetchone()
                             return res
                     else:
-                        return Response('SQL Fail', status=404)
+                        return False
             except Exception as e:
                 print(e)
             finally:

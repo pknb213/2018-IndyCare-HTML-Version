@@ -21,111 +21,182 @@
     <script src="../static/js/libs/jquery.min.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="col-lg-6">
-            <label>Video Clip</label>
-            <video id="clip" width="100%" controls loop muted autoplay></video>
-            <div id="clip_msg"></div>
-        </div>
-        <div class="col-lg-6">
-            <table id="dataTable" width="100%" class="table table-striped table-lightfont">
-                <thead>
-                    <tr>
-                        <th>Idx</th>
-                        <th>Json</th>
-                        <th>File</th>
-                        <th>SN</th>
-                        <th>Time</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
-</body>
-<script type="text/javascript">
-    $(document).ready(()=>{
-        load_clip();
-        setInterval(load_clip, 30000);
-    });
-    function get_sn() {
-        $.ajax({
-            type: "GET",
-            url: "/search/sn"
-        });
-    }
-    function load_clip() {
-           console.log("Started Ajax");
-           const sn = 'D1234';
-           $.ajax({
-               type: "GET",
-               url: "/clip/" + sn + "/check",
-               success: (res)=>{
-                   console.log("Res : " + res);
-                   let video = document.getElementById("clip");
-                   let msg = document.getElementById('clip_msg');
-                   if (res==='ready'){
-                       video.style.display = 'block';
-                       msg.style.display = 'none';
-                       video.setAttribute('src', '/static/Chronograf.mp4');
-                       console.log("Clip : ready");
-                   }else if(res==='ok') {
-                       video.style.display = 'block';
-                       msg.style.display = 'none';
-                       video.setAttribute('poster', '/clip/poster');
-                       video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
-                       console.log(video);
-                       console.log("Clip : ok");
-                   }else{
-                       $("#clip_msg").append("<p> Please, Refresh</p>");
-                        video.style.display = 'block';
+<div class="container-fluid">
+    <div class="col-lg-6">
+        <label>Video Clip</label>
+        <video id="clip" width="100%" controls loop muted autoplay></video>
+        <div id="clip_msg"></div>
+        <script type="text/javascript">
+            $(document).ready(() => {
+                load_clip();
+                setInterval(load_clip, 30000);
+                load_opdata();
+            });
+
+            function load_clip() {
+                console.log("Started Ajax");
+                const sn = "{{ sn }}";
+                $.ajax({
+                    type: "GET",
+                    url: "/clip/" + sn + "/check",
+                    success: (res) => {
+                        console.log("Res : " + res);
+                        let video = document.getElementById("clip");
+                        let msg = document.getElementById('clip_msg');
+                        if (res === 'ready') {
+                            video.style.display = 'block';
+                            msg.style.display = 'none';
+                            video.setAttribute('src', '/static/Chronograf.mp4');
+                            console.log("Clip : ready");
+                        } else if (res === 'ok') {
+                            video.style.display = 'block';
+                            msg.style.display = 'none';
+                            video.setAttribute('poster', '/clip/poster');
+                            video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
+                            console.log(video);
+                            console.log("Clip : ok");
+                        } else {
+                            $("#clip_msg").append("<p> Please, Refresh</p>");
+                            video.style.display = 'block';
+                            msg.style.display = 'block';
+                            video.setAttribute('src', '{{ url_for('static', filename='img/bk.jpg') }}');
+                            console.log("Blackbox load : %s", res);
+                        }
+                    },
+                    error: (request, status, error) => {
+                        let video = document.getElementById("black_box_clip");
+                        let msg = document.getElementById("black_box_message");
+                        video.style.display = 'none';
                         msg.style.display = 'block';
-                        video.setAttribute('src', '{{ url_for('static', filename='img/bk.jpg') }}');
-                        console.log("Blackbox load : %s", res);
-                   }
-               },
-               error: (request, status, error)=>{
-                    let video = document.getElementById("black_box_clip");
-                    let msg = document.getElementById("black_box_message");
-                    video.style.display = 'none';
-                    msg.style.display = 'block';
-                    $('#clip_msg').append("<p>" + status + "</p>");
-                    console.log("Load Black Box Fail " + request + status + error);
-               }
-           });
-       }
+                        $('#clip_msg').append("<p>" + status + "</p>");
+                        console.log("Load Black Box Fail " + request + status + error);
+                    }
+                });
+            }
 
-       // SSE 코드
-       let ev_source = new EventSource("{{url_for('sse.stream')}}?channel={{sn}}_ev");
-        ev_source.addEventListener('message', function (event) {
-            $("#eventHistoryTable").DataTable().ajax.reload();
-        }, false);
-        ev_source.addEventListener('error', function (event) {
-            //alert("Failed to connect to event stream");
-        }, false);
+            // SSE 코드
+            let ev_source = new EventSource("{{url_for('sse.stream')}}?channel={{sn}}_ev");
+            ev_source.addEventListener('message', function (event) {
+                $("#eventHistoryTable").DataTable().ajax.reload();
+            }, false);
+            ev_source.addEventListener('error', function (event) {
+                //alert("Failed to connect to event stream");
+            }, false);
+        </script>
+    </div>
+    <div class="col-lg-6">
+        <table id="dataTable" width="100%" class="table table-striped table-lightfont">
+            <thead>
+            <tr>
+                <th>Idx</th>
+                <th>Json</th>
+                <th>File</th>
+                <th>SN</th>
+                <th>Time</th>
+                <th>Down</th>
+            </tr>
+            </thead>
+        </table>
+        <script type="text/javascript">
+            // $.fn.dataTable.ext.errMode = 'none';
+            $(document).ready(function () {
+                $('#dataTable').DataTable({
+                    "processing": true,
+                    "searching": false,
+                    "paging": false,
+                    "lengthChange": false,
+                    ajax: {
+                        "url": "/list/events/{{ sn }}",
+                        "type": "GET",
+                        "dataSrc": "",
+                    },
+                    columns: [
+                        {"data": "idx"},
+                        {"data": "json"},
+                        {"data": "file"},
+                        {"data": "sn"},
+                        {"data": "occurrence_time"},
+                        {"data": "down"}
+                    ],
+                    order: [[0, 'desc']]
+                });
+            });
+        </script>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="col-md-4">
+        <canvas id="myChart" width="600" height="300"></canvas>
+    </div>
+    <script type="text/javascript">
+        function load_opdata() {
+            let jsonData = $.ajax({
+                url: "/opdata2",
+                dataType: "json"
+            }).done(function (res) {
+                console.log(res);
 
-</script>
+                const config = {
+                    type: 'line',
+                    data: {
+                        dataset: [
+                            {
+                                label: 'X data',
+                                data: [{'x': '2019-06-20 10:22:33', 'y': "1"},
+                                    {'x': '2019-06-20 10:23:33', 'y': "3"},
+                                    {'x': '2019-06-20 10:24:33', 'y': "5"},
+                                    {'x': '2019-06-20 10:25:33', 'y': "7"},
+                                    {'x': '2019-06-20 10:26:33', 'y': "11"},
+                                    {'x': '2019-06-20 10:27:33', 'y': "13"},
+                                    {'x': '2019-06-20 10:28:33', 'y': "25"},
+                                    {'x': '2019-06-20 10:29:33', 'y': "48"},
+                                    {'x': '2019-06-20 10:30:33', 'y': "32"},
+                                    {'x': '2019-06-20 10:31:33', 'y': "25"},
+                                    {'x': '2019-06-20 10:32:33', 'y': "11"},
+                                    {'x': '2019-06-20 10:33:33', 'y': "32"}],
+                                fill: true,
+                                backgroundColor: "rgba(255,99,132,0.2)",
+                                borderColor: "rgba(255,99,132)",
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        animation: false,
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                distribution: 'series',
+                                time: {
+                                    format: "YYYY-MM-DD h:mm:ss"
+                                }
+                            }],
+                            yAxes: [{
+                                //display: true
 
-<script type="text/javascript">
-    // $.fn.dataTable.ext.errMode = 'none';
-    $(document).ready(function () {
-        $('#dataTable').DataTable({
-            "processing": true,
-            ajax: {
-                "url": "/list/events",
-                "type": "GET",
-                "dataSrc": "",
-            },
-            columns: [
-                {"data": "idx"},
-                {"data": "json"},
-                {"data": "file"},
-                {"data": "sn"},
-                {"data": "occurrence_time"}
-            ],
-            order: [[0, 'desc']]
-        });
-    });
-</script>
+                            }]
+                        }
+                    }
+                };
+
+                const ctx = document.getElementById("myChart").getContext('2d');
+
+                const myChart = new Chart(ctx, config);
+
+            });
+
+        }
+
+    </script>
+    <div class="col-md-4">
+
+    </div>
+    <div class="col-md-4">
+
+    </div>
+</div>
+</body>
+
 
 <!-- Bootstrap and necessary plugins -->
 <script src="../static/js/libs/tether.min.js"></script>
