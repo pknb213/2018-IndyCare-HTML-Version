@@ -19,6 +19,8 @@
     <link href="../static/css/style.css" rel="stylesheet">
     <!-- Jquery -->
     <script src="../static/js/libs/jquery.min.js"></script>
+    <script src="../static/js/libs/moment-develop/moment.js/"></script>
+    <script src="../static/js/libs/Chart.js-2.8.0/dist/Chart.min.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -125,76 +127,161 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <canvas id="myChart" width="600" height="300"></canvas>
     </div>
     <script type="text/javascript">
         function load_opdata() {
-            let jsonData = $.ajax({
+            $.ajax({
                 url: "/opdata2",
                 dataType: "json"
             }).done(function (res) {
-                console.log(res);
 
-                const config = {
+                var s1 = {
+                    label: 's1',
+                    data: res,
+                    fill: true,
+                    backgroundColor: "rgba(255,99,132,0.2)",
+                    borderColor: "rgba(255,99,132)",
+                    borderWidth: 1
+                };
+
+                var cfg = {
                     type: 'line',
-                    data: {
-                        dataset: [
-                            {
-                                label: 'X data',
-                                data: [{'x': '2019-06-20 10:22:33', 'y': "1"},
-                                    {'x': '2019-06-20 10:23:33', 'y': "3"},
-                                    {'x': '2019-06-20 10:24:33', 'y': "5"},
-                                    {'x': '2019-06-20 10:25:33', 'y': "7"},
-                                    {'x': '2019-06-20 10:26:33', 'y': "11"},
-                                    {'x': '2019-06-20 10:27:33', 'y': "13"},
-                                    {'x': '2019-06-20 10:28:33', 'y': "25"},
-                                    {'x': '2019-06-20 10:29:33', 'y': "48"},
-                                    {'x': '2019-06-20 10:30:33', 'y': "32"},
-                                    {'x': '2019-06-20 10:31:33', 'y': "25"},
-                                    {'x': '2019-06-20 10:32:33', 'y': "11"},
-                                    {'x': '2019-06-20 10:33:33', 'y': "32"}],
-                                fill: true,
-                                backgroundColor: "rgba(255,99,132,0.2)",
-                                borderColor: "rgba(255,99,132)",
-                                borderWidth: 1
-                            }
-                        ]
-                    },
+                    data: {datasets: [s1]},
                     options: {
-                        animation: false,
                         scales: {
                             xAxes: [{
                                 type: 'time',
                                 distribution: 'series',
                                 time: {
-                                    format: "YYYY-MM-DD h:mm:ss"
+                                    parser: 'YYYY-MMM-D h:mm:ss:',
+                                    unit: 'minute'
+                                },
+                                ticks: {
+                                    autoSkip: true,
+                                    source: 'auto'
                                 }
                             }],
                             yAxes: [{
-                                //display: true
-
-                            }]
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Closing price ($)'
+                                }
+                            }],
+                            tooltips: {
+                                intersect: false,
+                                mode: 'index',
+                                callbacks: {
+                                    label: function (tooltipItem, myData) {
+                                        var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += parseFloat(tooltipItem.value).toFixed(2);
+                                        return label;
+                                    }
+                                }
+                            }
                         }
                     }
                 };
 
-                const ctx = document.getElementById("myChart").getContext('2d');
-
-                const myChart = new Chart(ctx, config);
-
+                var ctx = document.getElementById('myChart').getContext('2d');
+                ctx.canvas.width = 1000;
+                ctx.canvas.height = 600;
+                var myChart = new Chart(ctx, cfg);
             });
-
+        }
+    </script>
+    <div class="col-md-6">
+        <canvas id="TTest" width="600" height="300"></canvas>
+    </div>
+    <script type="text/javascript">
+        function randomNumber(min, max) {
+            return Math.random() * (max - min) + min;
         }
 
+        function randomBar(date, lastClose) {
+            var open = randomNumber(lastClose * 0.95, lastClose * 1.05).toFixed(2);
+            var close = randomNumber(open * 0.95, open * 1.05).toFixed(2);
+            return {
+                t: date.valueOf(),
+                y: close
+            };
+        }
+
+        var dateFormat = 'MMMM DD YYYY';
+        var date = moment('April 01 2017', dateFormat);
+        var data = [randomBar(date, 30)];
+        while (data.length < 60) {
+            date = date.clone().add(1, 'd');
+            if (date.isoWeekday() <= 5) {
+                data.push(randomBar(date, data[data.length - 1].y));
+            }
+        }
+
+        var ctx = document.getElementById('TTest').getContext('2d');
+        ctx.canvas.width = 1000;
+        ctx.canvas.height = 600;
+        // console.log(data);
+
+        var cfg = {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'CHRT - Chart.js Corporation',
+                    data: data,
+                    type: 'line',
+                    pointRadius: 0,
+                    lineTension: 0,
+                    fill: false,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        distribution: 'series',
+                        ticks: {
+                            source: 'data',
+                            autoSkip: true
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Closing price ($)'
+                        }
+                    }]
+                },
+                tooltips: {
+                    intersect: false,
+                    mode: 'index',
+                    callbacks: {
+                        label: function (tooltipItem, myData) {
+                            var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+                            if (label) {
+                                label += ': ';
+                            }
+                            label += parseFloat(tooltipItem.value).toFixed(2);
+                            return label;
+                        }
+                    }
+                }
+            }
+        };
+
+        var chart = new Chart(ctx, cfg);
+        document.getElementById('update').addEventListener('click', function () {
+            var type = document.getElementById('type').value;
+            chart.config.data.datasets[0].type = type;
+            chart.update();
+        });
     </script>
-    <div class="col-md-4">
-
-    </div>
-    <div class="col-md-4">
-
-    </div>
 </div>
+
 </body>
 
 
@@ -209,9 +296,9 @@
 <!-- Plugins and scripts required by this views -->
 <script src="../static/js/libs/toastr.min.js"></script>
 <script src="../static/js/libs/gauge.min.js"></script>
-<script src="../static/js/libs/moment.min.js"></script>
+<script src="../static/js/libs/moment-develop/moment.js/"></script>
 <script src="../static/js/libs/daterangepicker.js"></script>
-<script src="../static/js/libs/Chart.min.js"></script>
+<script src="../static/js/libs/Chart.js-2.8.0/dist/Chart.min.js"></script>
 <script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>
 
 <!-- Custom scripts required by this view -->

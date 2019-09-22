@@ -1,8 +1,8 @@
 import os, sys
 from flask import Flask, render_template, send_from_directory, send_file, Response, request, jsonify, redirect, url_for
-import time, glob, json
+import time, glob, json, random
 import pymysql
-from datetime import datetime
+from datetime import datetime, timedelta
 from redis import Redis, RedisError
 from flask_sse import sse
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
@@ -34,7 +34,7 @@ class Robot(UserMixin):
 
 def check_robot(__id, __pwd):
     sql = "SELECT sn FROM robots WHERE sn=\"%s\" % __id"
-    if MySQL.mysql_select(sql, False):
+    if MySQL.select(sql, False):
         return __id == __pwd
 
 
@@ -91,7 +91,7 @@ class MySQL:
         return db
 
     @classmethod
-    def mysql_select(cls, __str, multi=True):
+    def select(cls, __str, multi=True):
         if type(__str) is str:
             try:
                 db = MySQL.connect()
@@ -115,7 +115,7 @@ class MySQL:
             raise Exception("Please, parameter must be String !")
 
     @classmethod
-    def mysql_insert(cls, __str):
+    def insert(cls, __str):
         if type(__str) is str:
             try:
                 db = MySQL.connect()

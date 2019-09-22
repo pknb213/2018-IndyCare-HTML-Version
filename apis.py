@@ -16,7 +16,7 @@ def ping():
 @app.route("/robots")
 def robots():
     sql = "SELECT sn, company, site FROM robots"
-    res = MySQL.mysql_select(sql)
+    res = MySQL.select(sql)
     for i in res:
         i['Deploy'] = "<a href=/deployment/%s>Deployment</a>" % i['sn']
     return jsonify(res)
@@ -122,7 +122,7 @@ def add_event():
     print("Insert Mysql : ", request.json)
     sql = "INSERT INTO events(json, sn) " \
           "VALUES(\"%s\", \"%s\")" % (str(request.json), 'D1234')
-    MySQL.mysql_insert(sql)
+    MySQL.insert(sql)
     load_sse_command('D1234', '_ev')
     return Response('ok')
 
@@ -131,7 +131,7 @@ def add_event():
 def get_event_list_for_datatable(sn):
     # todo : DataTable에 출력할 용도인 API
     sql = "SELECT idx, json, file, sn, occurrence_time FROM events WHERE sn=\"%s\"" % sn
-    res = MySQL.mysql_select(sql, True)
+    res = MySQL.select(sql, True)
 
     if not res: return jsonify('')
     for i in res:
@@ -179,13 +179,32 @@ def get_event_file(filename, sn):
 
 @app.route("/opdata", methods=["POST"])
 def opdate():
-    print(request.json)
-    sql = "INSERT INTO opdatas(y) VALUES (\"%s\") " % request.json['y']
-    MySQL.mysql_insert(sql)
-    return Response('ok')
+    if request.method == 'GET':
+        # todo : 여기다 Select해서 opdata2처럼 가져오는 코드 짜기
+        sql = ""
+        res = MySQL.select(sql)
+
+        return jsonify(res)
+
+    if request.method == 'POST':
+        print(request.json)
+        sql = "INSERT INTO opdatas(y) VALUES (\"%s\") " % request.json['y']
+        MySQL.insert(sql)
+        return Response('ok')
 
 
 @app.route("/opdata2")
 def opdata2():
-
-    return jsonify({"ok":"yes"})
+    res = [
+        {"x": datetime.now(), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=1), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=2), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=3), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=4), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=5), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=6), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=7), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=8), "y": random.randrange(0, 50)},
+        {"x": datetime.now() + timedelta(hours=9), "y": random.randrange(0, 50)},
+    ]
+    return jsonify(res)
