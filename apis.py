@@ -177,22 +177,25 @@ def get_event_file(filename, sn):
     return Response('Error')
 
 
-@app.route("/opdata", methods=["POST"])
+@app.route("/opdata", methods=["GET", "POST"])
 def opdate():
     if request.method == 'GET':
-        # todo : 여기다 Select해서 opdata2처럼 가져오는 코드 짜기
-        sql = ""
+        # todo : 예전 IndyCARE SQL : 'select %s(%s) from \"%s\" where time > \'%s\' group by time(%s) fill(0)'
+        print("Time : ", datetime.now().strftime(fmtAll))
+        sql = "SELECT x, y FROM opdatas WHERE x >= \"%s\" AND x < \"%s\"" \
+               % (datetime.now() - timedelta(minutes=5), datetime.now().strftime(fmtAll))
         res = MySQL.select(sql)
-
+        print("Res : ", res)
         return jsonify(res)
 
     if request.method == 'POST':
         print(request.json)
-        sql = "INSERT INTO opdatas(y) VALUES (\"%s\") " % request.json['y']
+        sql = "INSERT INTO opdatas(x, y) VALUES (\"%s\", \"%s\") " % (request.json['x'], request.json['y'])
         MySQL.insert(sql)
         return Response('ok')
 
 
+# todo : Opdata Test 용도
 @app.route("/opdata2")
 def opdata2():
     res = [

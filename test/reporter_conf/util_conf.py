@@ -1,4 +1,4 @@
-import sys, os, glob, json, time, signal, zipfile, requests, datetime, functools
+import sys, os, glob, json, time, signal, zipfile, requests, datetime, functools, random
 from os import read, write, lseek, SEEK_SET
 from struct import pack, unpack, calcsize
 from sseclient import SSEClient

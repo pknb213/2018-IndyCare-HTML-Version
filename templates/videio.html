@@ -19,8 +19,8 @@
     <link href="../static/css/style.css" rel="stylesheet">
     <!-- Jquery -->
     <script src="../static/js/libs/jquery.min.js"></script>
-    <script src="../static/js/libs/moment-develop/moment.js/"></script>
-    <script src="../static/js/libs/Chart.js-2.8.0/dist/Chart.min.js"></script>
+    <script src="../static/js/libs/moment-develop/moment.js"></script>
+    <script src="../static/js/libs/Chart.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -133,7 +133,7 @@
     <script type="text/javascript">
         function load_opdata() {
             $.ajax({
-                url: "/opdata2",
+                url: "/opdata",
                 dataType: "json"
             }).done(function (res) {
 
@@ -156,7 +156,7 @@
                                 distribution: 'series',
                                 time: {
                                     parser: 'YYYY-MMM-D h:mm:ss:',
-                                    unit: 'minute'
+                                    unit: 'second'
                                 },
                                 ticks: {
                                     autoSkip: true,
@@ -274,11 +274,12 @@
         };
 
         var chart = new Chart(ctx, cfg);
-        document.getElementById('update').addEventListener('click', function () {
+
+        /*document.getElementById('update').addEventListener('click', function () {
             var type = document.getElementById('type').value;
             chart.config.data.datasets[0].type = type;
             chart.update();
-        });
+        });*/
     </script>
 </div>
 
@@ -296,9 +297,7 @@
 <!-- Plugins and scripts required by this views -->
 <script src="../static/js/libs/toastr.min.js"></script>
 <script src="../static/js/libs/gauge.min.js"></script>
-<script src="../static/js/libs/moment-develop/moment.js/"></script>
 <script src="../static/js/libs/daterangepicker.js"></script>
-<script src="../static/js/libs/Chart.js-2.8.0/dist/Chart.min.js"></script>
 <script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>
 
 <!-- Custom scripts required by this view -->

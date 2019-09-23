@@ -12,7 +12,7 @@ def task_server():
     s = requests.Session()
     s.post(URL + '/login', {'id': 'D1234', 'pwd': 'D1234'})
     while True:
-        s.post(URL + '/opdata', json={"y": 1})
+        s.post(URL + '/opdata', json={"x": str(datetime.datetime.now()), "y": random.randrange(20, 70)})
         time.sleep(1)
 
 

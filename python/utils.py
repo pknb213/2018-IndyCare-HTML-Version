@@ -2,11 +2,13 @@ import os, sys
 from flask import Flask, render_template, send_from_directory, send_file, Response, request, jsonify, redirect, url_for
 import time, glob, json, random
 import pymysql
+from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from redis import Redis, RedisError
 from flask_sse import sse
 from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 
+fmtAll = '%Y-%m-%d %H:%M:%S'
 
 # REDIS_URL = '13.209.42.91'
 REDIS_URL = 'localhost'
