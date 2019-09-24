@@ -3,6 +3,9 @@ sys.path.append(os.getcwd() + os.path.sep + 'reporter_conf')
 from http_conf import *
 from util_conf import *
 from event_conf import *
+from indyShm_conf import *
+from reporterShm_conf import *
+ROBOT_SERIAL_NUMBER = 'GLOBALTEST12'
 
 
 def task_server():
@@ -13,7 +16,7 @@ def task_server():
     s.post(URL + '/login', {'id': 'D1234', 'pwd': 'D1234'})
     while True:
         s.post(URL + '/opdata', json={"x": str(datetime.datetime.now()), "y": random.randrange(20, 70)})
-        time.sleep(1)
+        time.sleep(5)
 
 
 def reporter(q):
@@ -69,6 +72,15 @@ def clip_uploader():
 
 if __name__ == '__main__':
     set_start_method('spawn', True)
+
+    check_task_manager()
+    check_shm()
+    sn = check_serial_number()
+    shm = ReporterState(REPORTER_SHM, REPORTER_STATE_ADDR, REPORTER_SHM_SIZE)
+    shm.write_serial_number(shm, sn)
+    ROBOT_SERIAL_NUMBER = sn
+    print("Robot SerialNumber : ", shm.get_serial_number_value(shm))
+
     q = Queue()
     p1 = Process(target=event_log_uploader, args=())
     p2 = Process(target=clip_uploader, args=())

@@ -189,10 +189,21 @@ def opdate():
         return jsonify(res)
 
     if request.method == 'POST':
+        # todo : Message Type에 따른 Count, Mean 등 조건으로 나눠서 Query를 변환해야 함
         print(request.json)
         sql = "INSERT INTO opdatas(x, y) VALUES (\"%s\", \"%s\") " % (request.json['x'], request.json['y'])
         MySQL.insert(sql)
         return Response('ok')
+
+        '''
+        SELECT concat(
+			Year(x), '-'
+            , Month(x), '-'
+            , DAYOFMONTH(x), ' '
+            , Hour(x), ':'
+            ,((floor((minute(x)/15))+1)*15) -1, ':59') as Hours
+            , count(y) FROM opdatas WHERE x >= '2019-09-23 10:03:00' AND x < '2019-09-23 16:05:00' group by Hours
+        '''
 
 
 # todo : Opdata Test 용도
