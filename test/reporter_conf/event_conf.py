@@ -4,7 +4,8 @@ import glob
 
 
 class EventFiles:
-    EVENT_DIRECTORY = os.path.join(os.getcwd(), 'save-videos\\')
+    EVENT_DIRECTORY = os.path.join('/home/user/', 'save-videos/')
+    # EVENT_DIRECTORY = os.path.join(os.getcwd(), 'save-videos\\')
     latest_log = ''
 
     @classmethod

@@ -81,7 +81,7 @@ def clip_cam(sn, cam):
     print(datetime.now().timestamp() - float(cache.hget(sn, 'clip')))
     if not os.path.exists(clip_path) or \
         'clip'.encode('utf-8') not in cache.hkeys(sn) or \
-            datetime.now().timestamp() - float(cache.hget(sn, 'clip')) > 30:
+            datetime.now().timestamp() - float(cache.hget(sn, 'clip')) > 60:
         print("Clip을 SSE에게 요청하겠사와요")
         cache.hset(sn, 'clip', 0)
         sse.publish({"message": str(cam)}, channel=sn + '_clip')
@@ -204,6 +204,27 @@ def opdate():
             ,((floor((minute(x)/15))+1)*15) -1, ':59') as Hours
             , count(y) FROM opdatas WHERE x >= '2019-09-23 10:03:00' AND x < '2019-09-23 16:05:00' group by Hours
         '''
+
+
+@app.route("/reporter/kpi", methods=["POST"])
+def post_reporter_kpi():
+    pass
+
+
+@app.route("/reporter/robot/status", methods=["POST"])
+def post_reporter_robot_status():
+    pass
+
+
+@app.route("/robot/status")
+def get_robot_status():
+    pass
+
+
+# Todo : 만들어야하는 API :
+#  report_robot_opdata : 위의 Opdata에 들어오는 값으로 조건 걸고 mean, count를 구별해야 함
+#  report_kpi_string : KPI Mysql에 저장하는 용도
+#  report_robot_status : 전의 코드는 Redis에 저장하고, get API를 통해 Redis에서 가져와서 AJAX해서 페이지가 가져감.
 
 
 # todo : Opdata Test 용도

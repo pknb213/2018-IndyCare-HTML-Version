@@ -1,4 +1,4 @@
-# from posix_ipc import MessageQueue, SharedMemory, O_CREAT
+from posix_ipc import MessageQueue, SharedMemory, O_CREAT
 from os import read, write, lseek, SEEK_SET
 from struct import pack, unpack, calcsize
 
@@ -53,6 +53,20 @@ INDY_SHM_MGR_OFFSET = 64
 '''       p    |      char[]    |     String         '''
 '''       P    |      void *    |     Int (1)        '''
 
+'------------------ mtype description ----------------------'
+'        mtype Range    |     Description                   '
+'           1 ~ 99      |     Operation command             '
+'         100 ~ 199     | Server configuration information  '
+'         200 ~ 299     |     IndySW information            '
+'-----------------------------------------------------------'
+'             1         |        Count                      '
+'             2         |        Mean                       '
+'           100         |        KPI configuration          '
+'           101         |        IP address                 '
+'           102         |        Robot S/N                  '
+'           200         |        IndySW version             '
+'-----------------------------------------------------------'
+
 
 class ShmWrapper(object):
     def __init__(self, name, offset, size, flags=O_CREAT):  # flag = 0
@@ -89,7 +103,7 @@ class MessageCounter(ShmWrapper):
 class ErrorCode(ShmWrapper):
     @property
     def error_code(self):
-        return unpack('i', super().read())[0]
+        return unpack('i', super().read()[0:4])[0]
 
     @staticmethod
     def get_all_error(indyshm):
@@ -151,7 +165,7 @@ class ControlState(ShmWrapper):
         return super().read()[4]
 
     @property
-    def movedone(self):
+    def finish(self):
         return super().read()[5]
 
     @property
@@ -168,7 +182,7 @@ class ControlState(ShmWrapper):
 
     @staticmethod
     def get_all_robot_state(indyshm):
-        keys = ['busy', 'collision', 'emergency', 'error', 'home', 'movedone', 'ready', 'resetting', 'zero']
+        keys = ['busy', 'collision', 'emergency', 'error', 'home', 'finish', 'ready', 'resetting', 'zero']
         st = {}
         for key in keys: st[key] = getattr(indyshm, key)
         return st
@@ -201,14 +215,15 @@ class RobotInfoData(ShmWrapper):
 
     @staticmethod
     def get_all_robot_info_data(indyshm):
-        keys = ['robotModel', 'robotBuildVersion', 'robotBuildData', 'robotSN', 'robotControlBoxSN', 'robotStepSN']
+        keys = ['robot_model', 'robot_build_version', 'robot_build_data', 'robot_serial_number',
+                'robot_control_box_serial_number', 'step_serial_number']
         st = {}
         for key in keys: st[key] = getattr(indyshm, key)
         return st
 
     @staticmethod
     def get_serial_number(indyshm):
-        return getattr(indyshm, 'robotSN')
+        return getattr(indyshm, 'robot_serial_number')
 
 
 class ReporterState(ShmWrapper):
@@ -256,32 +271,33 @@ class ReporterState(ShmWrapper):
 
 class SystemState(ShmWrapper):
     @property
-    def runningTime(self):
+    def running_time(self):
         return unpack('d', super().read()[0:8])[0]
 
     @property
-    def rtCycleTime(self):
+    def rt_cycle_time(self):
         return unpack('I', super().read()[0x0008:0x000c])[0]
 
     @property
-    def rtCycleJitter(self):
+    def rt_cycle_Jitter(self):
         return unpack('I', super().read()[0x0010:0x0014])[0]
 
     @property
-    def taskExecPeriod(self):
+    def task_exec_period(self):
         return unpack('I', super().read()[0x0018:0x001c])[0]
 
     @property
-    def taskExecPeriod_max(self):
+    def task_exec_period_max(self):
         return unpack('I', super().read()[0x0020:0x0024])[0]
 
     @property
-    def overrunCount(self):
+    def overrun_count(self):
         return unpack('I', super().read()[0x0028:0x002c])[0]
 
     @staticmethod
-    def getAllSysState(indyshm):
-        keys = ['runningTime', 'rtCycleTime', 'rtCycleJitter', 'taskExecPeriod', 'taskExecPeriod_max', 'overrunCount']
+    def get_all_sys_state(indyshm):
+        keys = ['running_time', 'rt_cycle_time', 'rt_cycle_Jitter', 'task_exec_period',
+                'task_exec_period_max', 'overrun_count']
         st = {}
         for key in keys: st[key] = getattr(indyshm, key)
         return st

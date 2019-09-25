@@ -14,6 +14,23 @@ def set_proc_name(newname):
 set_proc_name(b'IndyCAREReport')
 
 
+def check_task_manager():
+    while True:
+        try:
+            print("\n**************** Task Manager Checking ... **************** ")
+            shm = RobotState(INDY_SHM, INDY_SHM_ROBOT_STATE_ADDR, ROBOT_STATE_SHM_SIZE)
+            print(">> Task Manager : %d" % shm.check_is_task_running(shm))
+            if shm.check_is_task_running(shm) is 0: raise Exception
+        except Exception as e:
+            print(">>>> Fail to Access from Robot SHM : ", e)
+            print(">>>> Time : ", datetime.datetime.now())
+            time.sleep(10)
+        else:
+            print(">>>> Success : ",  datetime.datetime.now())
+            time.sleep(1)
+            return True
+
+
 def check_shm():
     t = datetime.datetime.now()
     while True:
@@ -36,29 +53,13 @@ def check_shm():
             return True
 
 
-def check_task_manager():
+def check_robot_info():
     while True:
         try:
-            print("\n**************** Task Manager Checking ... **************** ")
-            shm = RobotState(INDY_SHM, INDY_SHM_ROBOT_STATE_ADDR, ROBOT_STATE_SHM_SIZE)
-            print(">> Task Manager : %d") % shm.check_is_task_running(shm)
-            if shm.check_is_task_running(shm) is 0: raise Exception
-        except Exception as e:
-            print(">>>> Fail to Access from Robot SHM : ", e)
-            print(">>>> Time : ", datetime.datetime.now())
-            time.sleep(10)
-        else:
-            print(">>>> Success  : ", )
-            time.sleep(1)
-            return True
-
-
-def check_serial_number():
-    while True:
-        try:
-            print("\n**************** Serial Number Checking ... **************** ")
+            print("\n**************** Robot information Checking ... **************** ")
             shm = RobotInfoData(INDY_SHM, INDY_SHM_ROBOT_INFO_ADDR, ROBOT_INFO_SHM_SIZE)
             sn = shm.get_serial_number(shm)
+            print(shm.get_all_robot_info_data(shm))
         except Exception as e:
             print(">>>> Fail to Access from Robot Information SHM : ", e)
             print(">>>> Time : ", datetime.datetime.now())

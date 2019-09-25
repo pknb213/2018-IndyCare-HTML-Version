@@ -138,7 +138,7 @@
                 dataType: "json"
             }).done(function (res) {
 
-                var s1 = {
+                let s1 = {
                     label: 's1',
                     data: res,
                     fill: true,
@@ -147,7 +147,7 @@
                     borderWidth: 1
                 };
 
-                var cfg = {
+                let cfg = {
                     type: 'line',
                     data: {datasets: [s1]},
                     options: {
@@ -188,10 +188,10 @@
                     }
                 };
 
-                var ctx = document.getElementById('myChart').getContext('2d');
+                let ctx = document.getElementById('myChart').getContext('2d');
                 ctx.canvas.width = 1000;
                 ctx.canvas.height = 600;
-                var myChart = new Chart(ctx, cfg);
+                let myChart = new Chart(ctx, cfg);
             });
         }
     </script>
