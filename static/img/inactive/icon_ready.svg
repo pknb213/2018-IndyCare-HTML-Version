@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="33px" viewBox="0 0 32 33" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>icon_ready copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="시안-2차(수정)-copy-5" transform="translate(-466.000000, -387.000000)" fill="#AAAFB6" fill-rule="nonzero">
+            <g id="Robot-information" transform="translate(120.000000, 292.000000)">
+                <g id="rState" transform="translate(316.000000, 0.000000)">
+                    <g id="item2" transform="translate(30.000000, 96.000000)">
+                        <g id="icon_ready">
+                            <path d="M16,4 C18.1256675,4 20.1222463,4.55269459 21.8538697,5.52221709 L20.440516,7.03751507 C19.1026494,6.37338651 17.5949292,6 16,6 C10.4771525,6 6,10.4771525 6,16 C6,21.5228475 10.4771525,26 16,26 C21.5228475,26 26,21.5228475 26,16 C26,15.4585375 25.9569659,14.9271262 25.8741314,14.4089997 L27.5232438,12.6399818 C27.8335997,13.7061598 28,14.8336474 28,16 C28,22.627417 22.627417,28 16,28 C9.372583,28 4,22.627417 4,16 C4,9.372583 9.372583,4 16,4 Z M24.6936252,7.86357248 L26.3062392,9.36006033 L14.9043042,21.646776 L10.6304187,16.7208838 L12.2921365,15.2791162 L14.9593456,18.353224 L24.6936252,7.86357248 Z" id="inactive"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

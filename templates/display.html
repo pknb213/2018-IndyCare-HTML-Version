@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>IndyCARE - Robot Detail</title>
+
+    <link rel="shortcut icon" href="../static/img/indycare_favicon.ico"/>
+    <link rel="stylesheet" href="../static/css/style.css"/>
+    <!-- <link rel="stylesheet" href="/css/bootstrap.css" /> -->
+    <!-- Jquery -->
+    <script src="../static/js/libs/jquery.min.js"></script>
+{#<script type="text/javascript" src="https://cdn.datatables.net/w/dt/dt-1.10.18/datatables.min.js"></script>#}
+</head>
+
+<body>
+<!-- page wrapper -->
+<div id="wrapper">
+    <!-- sidebar -->
+    <div class="side_nav">
+        <div class="brand_logo">
+            <a href="http://indycare.neuromeka.com">
+                <img src="../static/img/img-logo.svg" alt="indycare_logo"/>
+                <div>
+                    <img src="../static/img/logo-indycare.svg" alt="indycare_text_logo"/>
+                </div>
+            </a>
+        </div>
+        <div>
+            <div class="user_info">
+                <img src="../static/img/img_profile.svg" alt="profile_img"/>
+                <div class="user_name">
+                    <span>admin</span>
+                </div>
+                <div class="user_roll">
+                    <span>admin</span>
+                </div>
+                <div class="profile_menu">
+                    <a href="#">
+                        <img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu"/>
+                    </a>
+                </div>
+            </div>
+
+            <nav class="nav_menu">
+                <ul class="sub_menu">
+                    <li class="sub">
+                        <a href="#">
+                            <img src="../static/img/icon-user.svg" alt="icon_User"/>
+                            <span>User</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="#">User<br/>List</a>
+                            </li>
+                            <li>
+                                <a href="#">User<br/>Register</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sub">
+                        <a href="#">
+                            <img src="../static/img/icon-company.svg" alt="icon_Company"/>
+                            <span>Company</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="#">Company<br/>List</a>
+                            </li>
+                            <li>
+                                <a href="#">Company<br/>Register</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="side_footer">
+                <a href="https://www.neuromeka.com" target="_blank">
+                    <img src="../static/img/neuromeka.svg" alt="neuromeka_homepage_logo"/>
+                    <span>HOME</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- //sidebar -->
+
+    <!-- content_wrap -->
+    <div class="contents_wrap clear">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <!-- header_top -->
+            <div class="header_top">
+                <div class="top_menu">
+                    <div class="header_toggle">
+                        <img src="../static/img/icon-menu.svg" alt="_side_bar_toggle_menu"/>
+                    </div>
+
+                    <div class="item_wrap">
+                        <div class="header_item">
+                            <ul>
+                                <li class="header_search">
+                                    <label for="search">
+                                        <img src="../static/img/icon_search.svg" alt="icon_search"/>
+                                        <input
+                                                type="text"
+                                                placeholder="search for..."
+                                                name="search"
+                                        />
+                                        <input type="submit" class="blind"/>
+                                    </label>
+                                </li>
+                                <li>
+                                    <a
+                                            href="http://helpdesk.neuromeka.com/projects/forum/boards"
+                                            target="_blank"
+                                    >
+                                        <button>문의하기</button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <img src="../static/img/icon_noti.svg" alt="icon_noti"/>
+                                </li>
+                                <li>
+                                    <img src="../static/img/icon_log_out.svg" alt="icon_log_out"/>
+                                    <span>Log out</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header_title">
+                    <h1>ROBOT DETAIL</h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li><a href="#">HOME</a></li>
+                            <li><a href="#">COMPANY</a></li>
+                            <li><a href="#">COMPANY List</a></li>
+                            <li><a href="#">SITE LIST</a></li>
+                            <li><a href="#">ROBOT LIST</a></li>
+                            <li class="on"><a href="#">ROBOT DETAIL</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- //header_top -->
+
+            <!-- tab_menu -->
+            <div class="tab_menu">
+                <button
+                        class="tablinks"
+                        onclick="openMenu(event, 'Robot_Information')"
+                        id="defaultOpen"
+                >
+                    Robot Information
+                </button>
+                <button
+                        class="tablinks"
+                        onclick="openMenu(event, 'Chart_Information')"
+                >
+                    Chart Information
+                </button>
+            </div>
+            <!-- //tab_menu -->
+
+            <!-- tab_contents -->
+            <div class="tab_contents_wrap">
+                <!-- tab_robot_information -->
+                <div id="Robot_Information" class="tabcontent tab_contents">
+                    <!-- robot info_img -->
+                    <div class="robot_info">
+                        <div class="robot_img">
+                            <img src="../static/img/img_productF.png" alt="robot_img"/>
+                            <div class="model_name">
+                                <span>Indy7</span>
+                                <button>
+                                    <img
+                                            src="../static/img/icon_server_customer.svg"
+                                            alt="icon_customer"
+                                    />
+                                    <span>고객사정보</span>
+                                </button>
+                            </div>
+                            <div class="snnumber"><span>S/N D11924I07T02</span></div>
+                        </div>
+                    </div>
+                    <!-- //robot info_img -->
+
+                    <!-- robot_state -->
+                    <div class="robot_state">
+                        <div class="robot_state_info">
+                            <h3>Robot State</h3>
+                            <div class="robot_state_noti">
+                                <ul>
+                                    <li>
+                                        <img src="../static/img/icon_busy.svg" alt="icon_busy"/>
+                                        <span>BUSY</span>
+                                    </li>
+                                    <li>
+                                        <img src="../static/img/icon_ready.svg" alt="icon_ready"/>
+                                        <span>READY</span>
+                                    </li>
+                                    <li>
+                                        <img
+                                                src="../static/img/icon_collision.svg"
+                                                alt="icon_collision"
+                                        />
+                                        <span>COLLISON</span>
+                                    </li>
+                                    <li>
+                                        <img src="../static/img/icon_error.svg" alt="icon_error"/>
+                                        <span>ERROR</span>
+                                    </li>
+                                    <li>
+                                        <img
+                                                src="../static/img/icon_state_stop.svg"
+                                                alt="icon_state_stop"
+                                        />
+                                        <span>PROGRAM STATE</span>
+                                    </li>
+                                    <li>
+                                        <img
+                                                src="../static/img/icon_energency.svg"
+                                                alt="icon_energency"
+                                        />
+                                        <span>EMERGENCY</span>
+                                    </li>
+                                    <li>
+                                        <img
+                                                src="../static/img/icon_report_connected.svg"
+                                                alt="icon_report_connected"
+                                        />
+                                        <span>ROBOT CONNECTED</span>
+                                    </li>
+                                    <li>
+                                        <img
+                                                src="../static/img/icon_server_connected.svg"
+                                                alt="icon_server_connected"
+                                        />
+                                        <span>SERVER CONNECTED</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //robot_state -->
+
+                    <!-- robot_event_section -->
+                    <div class="event_section">
+                        <div class="event_view">
+                            <div class="section_title">
+                                <img src="../static/img/icon-dashcam.svg" alt="icon_dashcam"/>
+                                <div id="clip_msg"></div>
+                                <h3>Workplace View</h3>
+                            </div>
+                            <div class="time">
+                                <img src="../static/img/icon-time.svg" alt="icon_time"/>
+                                <span>2019.05.15 11:22:26</span>
+                            </div>
+                            {#<video id="dashcam" controls="controls">
+                                <source
+                                        src="../static/img/The_Power_of_Teamwork_-_Funny_Animation.mp4"
+                                        type="video/mp4"
+                                />
+                            </video>#}
+                            <video id="clip" controls loop muted autoplay></video>
+                        </div>
+
+                        <div class="event_history">
+                            <div class="section_title">
+                                <img
+                                        src="../static/img/icon-history.svg"
+                                        alt="icon_event_history"
+                                />
+                                <h3>Event History</h3>
+                                <div class="more">
+                                    <button id="history_Btn">
+                                        <span>더보기</span>
+                                        <img src="../static/img/icon_more.svg" alt="icon_more"/>
+                                    </button>
+                                    <!-- The Modal -->
+                                    <div id="history_Modal" class="more_modal">
+                                        <!-- Modal content -->
+                                        <div class="modal-content">
+                                            <span class="close">&times;</span>
+                                            <div class="history_table">
+                                                <h2>event_history</h2>
+                                                <table>
+                                                    <tr>
+                                                        <th>DATE</th>
+                                                        <th>EVENT</th>
+                                                        <th>LOG</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2019-05-22 10:19:39</td>
+                                                        <td>emergency stop</td>
+                                                        <td>
+                                                            <img
+                                                                    src="../static/img/icon-download.svg"
+                                                                    alt="icon_download"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2019-05-22 10:19:39</td>
+                                                        <td>emergency stop</td>
+                                                        <td>
+                                                            <img
+                                                                    src="../static/img/icon-download.svg"
+                                                                    alt="icon_download"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2019-05-22 10:19:39</td>
+                                                        <td>emergency stop</td>
+                                                        <td>
+                                                            <img
+                                                                    src="../static/img/icon-download.svg"
+                                                                    alt="icon_download"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2019-05-22 10:19:39</td>
+                                                        <td>emergency stop</td>
+                                                        <td>
+                                                            <img
+                                                                    src="../static/img/icon-download.svg"
+                                                                    alt="icon_download"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2019-05-22 10:19:39</td>
+                                                        <td>emergency stop</td>
+                                                        <td>
+                                                            <img
+                                                                    src="../static/img/icon-download.svg"
+                                                                    alt="icon_download"
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <table id="dataTable" class="">
+                                    <thead>
+                                    <tr>
+                                        <th>DATE</th>
+                                        <th>EVENT</th>
+                                        <th>LOG</th>
+                                    </tr>
+                                    </thead>
+                                </table>
+                                <script type="text/javascript">
+                                    // $.fn.dataTable.ext.errMode = 'none';
+                                    $(document).ready(function () {
+                                        $('#dataTable').DataTable({
+                                            "processing": true,
+                                            "searching": false,
+                                            "paging": false,
+                                            "lengthChange": false,
+                                            "bInfo": false,
+                                            "pageLength": 5,
+                                            "scrollXInner": '550px',
+                                            "scrollX": '550px',
+                                            "scrollY": '225px',
+                                            ajax: {
+                                                "url": "/list/events/{{ sn }}",
+                                                "type": "GET",
+                                                "dataSrc": "",
+                                            },
+                                            columns: [
+                                                {"data": "occurrence_time"},
+                                                {"data": "sn"},
+                                                {"data": "down"}
+                                            ],
+                                            order: [[0, 'desc']]
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //robot_event_section -->
+                    <div class="robot_chart">
+                        <div class="chart_section">
+                            <h3>WorK Count[CNT]</h3>
+                            <div class="chart_cnt">
+                                {#<img src="../static/img/chart_ex01.png" alt="WorK_Count_cahrt"/>#}
+                                <canvas id="myChart"></canvas>
+                                <script type="text/javascript">
+                                    function load_opdata() {
+                                        $.ajax({
+                                            url: "/opdata",
+                                            dataType: "json"
+                                        }).done(function (res) {
+
+                                            let data = {
+                                                label: 'Count',
+                                                data: res,
+                                                fill: true,
+                                                backgroundColor: "rgba(255,99,132,0.2)",
+                                                borderColor: "rgba(255,99,132)",
+                                                borderWidth: 1
+                                            };
+
+                                            let cfg = {
+                                                type: 'bar',
+                                                data: {datasets: [data]},
+                                                options: {
+                                                    scales: {
+                                                        xAxes: [{
+                                                            type: 'time',
+                                                            distribution: 'series',
+                                                            time: {
+                                                                parser: 'YYYY-MMM-D h:mm:ss:',
+                                                                unit: 'second'
+                                                            },
+                                                            ticks: {
+                                                                autoSkip: true,
+                                                                source: 'auto'
+                                                            }
+                                                        }],
+                                                        yAxes: [{
+                                                            scaleLabel: {
+                                                                display: true,
+                                                                labelString: 'Closing price ($)'
+                                                            }
+                                                        }],
+                                                        tooltips: {
+                                                            intersect: false,
+                                                            mode: 'index',
+                                                            callbacks: {
+                                                                label: function (tooltipItem, myData) {
+                                                                    var label = myData.datasets[tooltipItem.datasetIndex].label || '';
+                                                                    if (label) {
+                                                                        label += ': ';
+                                                                    }
+                                                                    label += parseFloat(tooltipItem.value).toFixed(2);
+                                                                    return label;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            };
+
+                                            let ctx = document.getElementById('myChart').getContext('2d');
+                                            // ctx.canvas.width = 1000;
+                                            // ctx.canvas.height = 600;
+                                            let myChart = new Chart(ctx, cfg);
+                                        });
+                                    }
+                                </script>
+                            </div>
+                        </div>
+
+                        <diV class="chart_section">
+                            <h3>Temperature[TMP]</h3>
+                            <div class="chart_tmp">
+                                <img src="../static/img/chart_ex02.png" alt="WorK_Count_cahrt"/>
+                            </div>
+                        </diV>
+                        <!-- <div class="chart_section">
+                          <h3>Analog Input [a01]</h3>
+                          <div>
+                            <img src="../static/img/chart_ex3.png" alt="WorK_Count_cahrt" />
+                          </div>
+                        </div>
+                        <div class="chart_section">
+                          <h3>Analog Input (a00)</h3>
+                          <div>
+                            <img src="../static/img/chart_ex4.png" alt="WorK_Count_cahrt" />
+                          </div>
+                        </div>
+                        <div class="chart_section">
+                          <h3>Temperature[TMP2]</h3>
+                          <div>
+                            <img src="../static/img/chart_ex5.png" alt="WorK_Count_cahrt" />
+                          </div>
+                        </div> -->
+                    </div>
+                </div>
+                <!-- //tab_robot_information -->
+
+                <!-- tab_chart_information -->
+                <div id="Chart_Information" class="tabcontent">
+                    <h3>Chart_Information</h3>
+                    <p>Chart_Information-----------</p>
+                </div>
+                <!-- //tab_chart_information -->
+            </div>
+            <!-- //tab_contents -->
+        </div>
+        <!-- //header_wrap -->
+    </div>
+    <!-- //content_wrap -->
+</div>
+<!-- // page wrapper -->
+<!-- Plugin -->
+<script src="../static/js/libs/moment-develop/moment.js"></script>
+{#<script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>#}
+<script type="text/javascript" src="../static/DataTables/datatables.js"></script>
+<!-- Custom JavaScript -->
+<script src="../static/js/tab_nav.js"></script>
+<script src="../static/js/video.js"></script>
+<script src="../static/js/more_modal.js"></script>
+<script src="../static/js/Chart.js"></script>
+<script>
+    $(document).ready(() => {
+        load_clip('D1234');
+        load_opdata();
+        setInterval(() => {
+            load_clip('D1234');
+        }, 30000);
+        setInterval(() => {
+            load_opdata();
+        }, 10000);
+    });
+</script>
+</body>
+</html>

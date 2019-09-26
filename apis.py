@@ -182,18 +182,42 @@ def opdate():
     if request.method == 'GET':
         # todo : 예전 IndyCARE SQL : 'select %s(%s) from \"%s\" where time > \'%s\' group by time(%s) fill(0)'
         print("Time : ", datetime.now().strftime(fmtAll))
-        sql = "SELECT x, y FROM opdatas WHERE x >= \"%s\" AND x < \"%s\"" \
-               % (datetime.now() - timedelta(minutes=5), datetime.now().strftime(fmtAll))
+        # sql = "SELECT concat(" \
+        #       "Year(x), '-', " \
+        #       "Month(x), '-', " \
+        #       "DAYOFMONTH(x), ' ', " \
+        #       "Hour(x), ':'," \
+        #       "((floor((minute(x)/15))+1)*15) -1, ':59') as Hours, " \
+        #       "count(y) FROM opdatas WHERE x >= \"%s\" AND x < \"%s\" group by Hours" \
+        #       % (datetime.utcnow() - timedelta(minutes=60), datetime.utcnow())
+        sql = "SELECT concat(" \
+              "date(opdatas.x) , ' ', sec_to_time(time_to_sec(x)-time_to_sec(x)%%(15*60)+(15*60))) as division_date, " \
+              "COUNT(y) from opdatas " \
+              "WHERE x >= \"%s\" AND x < \"%s\" group by x" \
+              % ((datetime.utcnow() - timedelta(minutes=60)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
         res = MySQL.select(sql)
         print("Res : ", res)
         return jsonify(res)
 
     if request.method == 'POST':
         # todo : Message Type에 따른 Count, Mean 등 조건으로 나눠서 Query를 변환해야 함
-        print(request.json)
-        sql = "INSERT INTO opdatas(x, y) VALUES (\"%s\", \"%s\") " % (request.json['x'], request.json['y'])
-        MySQL.insert(sql)
+        # mtype, msg, mdata
+        if request.json['mtype'] is 1:
+            print(request.json)
+            sql = "INSERT INTO opdatas(msg, y) VALUES (\"%s\", \"%s\") " % (request.json['msg'], request.json['mdata'])
+            MySQL.insert(sql)
+        elif request.json['mtype'] is 2:
+            print(request.json)
+            temp = request.json['mdata'].split(',')
+            sql = "INSERT INTO temperature_opdatas(msg, joint0, joint1, joint2, joint3, joint4, joint5) " \
+                  "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\") " \
+                  % (request.json['msg'], temp[0], temp[1], temp[2], temp[3], temp[4], temp[5])
+            MySQL.insert(sql)
+        else:
+            print("Insert Fail : ", request.json)
         return Response('ok')
+        # sql = "INSERT INTO opdatas(x, y) VALUES (\"%s\", \"%s\") " % (request.json['x'], request.json['y'])
+        # MySQL.insert(sql)
 
         '''
         SELECT concat(

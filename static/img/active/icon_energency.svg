@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>icon_energency copy</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="시안-2차(수정)-copy-5" transform="translate(-466.000000, -528.000000)" fill="#EE5252" fill-rule="nonzero">
+            <g id="Robot-information" transform="translate(120.000000, 292.000000)">
+                <g id="rState" transform="translate(316.000000, 0.000000)">
+                    <g id="item6" transform="translate(30.000000, 236.000000)">
+                        <g id="icon_energency">
+                            <path d="M21,8 C23.7614237,8 26,10.2385763 26,13 L26,15 C26,16.6568542 24.6568542,18 23,18 L22,18 L22,20 L27,20 C28.1045695,20 29,20.8954305 29,22 L29,27 C29,28.1045695 28.1045695,29 27,29 L5,29 C3.8954305,29 3,28.1045695 3,27 L3,22 C3,20.8954305 3.8954305,20 5,20 L10,20 L10,18 L9,18 C7.34314575,18 6,16.6568542 6,15 L6,13 C6,10.2385763 8.23857625,8 11,8 L21,8 Z M27,22 L5,22 L5,23.533 L26.9668746,23.579591 L26.964766,24.5795887 L5,24.533 L5,27 L27,27 L27,22 Z M20,18 L12,18 L12,20 L20,20 L20,18 Z M21,10 L11,10 C9.34314575,10 8,11.3431458 8,13 L8,15 C8,15.5522847 8.44771525,16 9,16 L23,16 C23.5522847,16 24,15.5522847 24,15 L24,13 C24,11.3431458 22.6568542,10 21,10 Z M29.5,7.5 L29.5,9.5 L24.5,8.5 L29.5,7.5 Z M2.5,7.5 L7.5,8.5 L2.5,9.5 L2.5,7.5 Z M25.9579024,3 L28.2560357,4.92836283 L23.893031,7.79440363 L25.9579024,3 Z M6.04209764,3 L8.10696902,7.79440363 L3.74396431,4.92836283 L6.04209764,3 Z" id="active"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

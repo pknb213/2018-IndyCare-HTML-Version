@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>icon_state_stop copy</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="시안-2차(수정)-copy-5" transform="translate(-466.000000, -493.000000)" fill="#FD7E14" fill-rule="nonzero">
+            <g id="Robot-information" transform="translate(120.000000, 292.000000)">
+                <g id="rState" transform="translate(316.000000, 0.000000)">
+                    <g id="item5" transform="translate(30.000000, 201.000000)">
+                        <g id="icon_programstate_stop">
+                            <path d="M16,4 C22.627417,4 28,9.372583 28,16 C28,22.627417 22.627417,28 16,28 C9.372583,28 4,22.627417 4,16 C4,9.372583 9.372583,4 16,4 Z M16,6 C10.4771525,6 6,10.4771525 6,16 C6,21.5228475 10.4771525,26 16,26 C21.5228475,26 26,21.5228475 26,16 C26,10.4771525 21.5228475,6 16,6 Z M14,12 C14.5522847,12 15,12.4477153 15,13 L15,19 C15,19.5522847 14.5522847,20 14,20 L13,20 C12.4477153,20 12,19.5522847 12,19 L12,13 C12,12.4477153 12.4477153,12 13,12 L14,12 Z M19,12 C19.5522847,12 20,12.4477153 20,13 L20,19 C20,19.5522847 19.5522847,20 19,20 L18,20 C17.4477153,20 17,19.5522847 17,19 L17,13 C17,12.4477153 17.4477153,12 18,12 L19,12 Z" id="icon_state_pause"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

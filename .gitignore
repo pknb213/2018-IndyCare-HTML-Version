@@ -6,4 +6,6 @@
 .upload/
 .vscode/
 .venv/
+.clips/
+.test/save-videos/
 venv/

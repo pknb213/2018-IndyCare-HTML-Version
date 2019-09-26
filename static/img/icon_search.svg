@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>icon_search</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="시안-2차(수정)" transform="translate(-1405.000000, -28.000000)" fill="#0072CE" fill-rule="nonzero">
+            <g id="Right-pannel_Top" transform="translate(90.000000, 0.000000)">
+                <g id="Search_bar" transform="translate(1302.000000, 21.000000)">
+                    <g id="icon_search" transform="translate(13.000000, 7.000000)">
+                        <path d="M10.5,3 C14.6421356,3 18,6.35786438 18,10.5 C18,12.1930901 17.4389847,13.7551481 16.492709,15.0104192 L21.5510619,20.4912459 L20.4489381,21.5087541 L15.4710511,16.1160426 C14.1476734,17.288307 12.4069491,18 10.5,18 C6.35786438,18 3,14.6421356 3,10.5 C3,6.35786438 6.35786438,3 10.5,3 Z M10.5,4.5 C7.1862915,4.5 4.5,7.1862915 4.5,10.5 C4.5,13.8137085 7.1862915,16.5 10.5,16.5 C13.8137085,16.5 16.5,13.8137085 16.5,10.5 C16.5,7.1862915 13.8137085,4.5 10.5,4.5 Z" id="Combined-Shape"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

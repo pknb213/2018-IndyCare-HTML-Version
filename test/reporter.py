@@ -20,7 +20,11 @@ def test_process():
     i = 0
     while True:
         try:
-            s.post(URL + '/opdata', json={"x": str(datetime.datetime.now()), "y": random.randrange(20, 70)})
+            dic = {'mtype': 1, 'msg': 'kpi0', 'mdata': 1}
+            s.post(URL + '/opdata', json=dic)
+            time.sleep(1)
+            dic = {'mtype':2, 'msg': 'kpi1', 'mdata': str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))}
+            s.post(URL + '/opdata', json=dic)
         except requests.exceptions.ConnectionError:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!")
