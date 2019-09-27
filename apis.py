@@ -130,7 +130,7 @@ def add_event():
 @app.route("/list/events/<sn>")
 def get_event_list_for_datatable(sn):
     # todo : DataTable에 출력할 용도인 API
-    sql = "SELECT idx, json, file, sn, occurrence_time FROM events WHERE sn=\"%s\"" % sn
+    sql = "SELECT idx, json, file, sn, occurrence_time FROM events WHERE sn=\"%s\" LIMIT 5 " % sn
     res = MySQL.select(sql, True)
 
     if not res: return jsonify('')
@@ -139,7 +139,8 @@ def get_event_list_for_datatable(sn):
         a = a.replace("\\", "\\\\")
         a = json.loads(a)
         a = a['log'].split('\\')
-        i['down'] = '<a class=c_hyper href=/file/event/%s/%s>Download</a>' % (a[-1], i['sn'])
+        i['down'] = '<a class=c_hyper href=/file/event/%s/%s>' \
+                    '<img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu" /></a>' % (a[-1], i['sn'])
 
     return jsonify(res)
 
@@ -177,26 +178,57 @@ def get_event_file(filename, sn):
     return Response('Error')
 
 
-@app.route("/opdata", methods=["GET", "POST"])
-def opdate():
+@app.route("/opdata/<sn>/<key>/recent/<period>")
+@app.route("/opdata", methods=["POST"])
+def opdate(sn='TEST1234', key='', period=''):
     if request.method == 'GET':
-        # todo : 예전 IndyCARE SQL : 'select %s(%s) from \"%s\" where time > \'%s\' group by time(%s) fill(0)'
-        print("Time : ", datetime.now().strftime(fmtAll))
-        # sql = "SELECT concat(" \
-        #       "Year(x), '-', " \
-        #       "Month(x), '-', " \
-        #       "DAYOFMONTH(x), ' ', " \
-        #       "Hour(x), ':'," \
-        #       "((floor((minute(x)/15))+1)*15) -1, ':59') as Hours, " \
-        #       "count(y) FROM opdatas WHERE x >= \"%s\" AND x < \"%s\" group by Hours" \
-        #       % (datetime.utcnow() - timedelta(minutes=60), datetime.utcnow())
-        sql = "SELECT concat(" \
-              "date(opdatas.x) , ' ', sec_to_time(time_to_sec(x)-time_to_sec(x)%%(15*60)+(15*60))) as division_date, " \
-              "COUNT(y) from opdatas " \
-              "WHERE x >= \"%s\" AND x < \"%s\" group by x" \
-              % ((datetime.utcnow() - timedelta(minutes=60)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
-        res = MySQL.select(sql)
-        print("Res : ", res)
+        print("SN : %s, Key : %s, Time : %s" % (sn, key, datetime.now().strftime(fmtAll)))
+        if key == 'count':
+            sql = "SELECT concat(" \
+                  "date(opdatas.x) , ' ', sec_to_time(time_to_sec(x)-time_to_sec(x)%%(15*60)+(15*60))) as division_date, " \
+                  "COUNT(y) from opdatas " \
+                  "WHERE x >= \"%s\" AND x < \"%s\" group by division_date" \
+                  % ((datetime.utcnow() - timedelta(minutes=60)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
+            res = MySQL.select(sql)
+            print("Res : ", res)
+            if res is not False:
+                for i in res:
+                    i['x'] = i['division_date']
+                    i['y'] = i['COUNT(y)']
+                    del i['division_date'], i['COUNT(y)']
+        elif key == 'mean':
+            sql = "SELECT x, msg, joint0, joint1, joint2, joint3, joint4, joint5 FROM temperature_opdatas " \
+                  "WHERE x >= \"%s\" AND x < \"%s\" ORDER by x DESC LIMIT 50" \
+                  % ((datetime.utcnow() - timedelta(hours=1)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
+            res = MySQL.select(sql)
+            # print("Res : ", res)
+
+            az = []
+            bz = []
+            cz = []
+            dz = []
+            ez = []
+            fz = []
+
+            if res is None: return jsonify(res)
+            for i in res:
+                a = {'x': i['x'].strftime(fmtAll), 'y': i['joint0']}
+                b = {'x': i['x'].strftime(fmtAll), 'y': i['joint1']}
+                c = {'x': i['x'].strftime(fmtAll), 'y': i['joint2']}
+                d = {'x': i['x'].strftime(fmtAll), 'y': i['joint3']}
+                e = {'x': i['x'].strftime(fmtAll), 'y': i['joint4']}
+                f = {'x': i['x'].strftime(fmtAll), 'y': i['joint5']}
+                az.append(a)
+                bz.append(b)
+                cz.append(c)
+                dz.append(d)
+                ez.append(e)
+                fz.append(f)
+
+            aa = [az, bz, cz, dz, ez, fz]
+            return jsonify(aa)
+        else:
+            res = None
         return jsonify(res)
 
     if request.method == 'POST':
@@ -219,16 +251,6 @@ def opdate():
         # sql = "INSERT INTO opdatas(x, y) VALUES (\"%s\", \"%s\") " % (request.json['x'], request.json['y'])
         # MySQL.insert(sql)
 
-        '''
-        SELECT concat(
-			Year(x), '-'
-            , Month(x), '-'
-            , DAYOFMONTH(x), ' '
-            , Hour(x), ':'
-            ,((floor((minute(x)/15))+1)*15) -1, ':59') as Hours
-            , count(y) FROM opdatas WHERE x >= '2019-09-23 10:03:00' AND x < '2019-09-23 16:05:00' group by Hours
-        '''
-
 
 @app.route("/reporter/kpi", methods=["POST"])
 def post_reporter_kpi():
@@ -244,11 +266,27 @@ def post_reporter_robot_status():
 def get_robot_status():
     pass
 
-
 # Todo : 만들어야하는 API :
 #  report_robot_opdata : 위의 Opdata에 들어오는 값으로 조건 걸고 mean, count를 구별해야 함
 #  report_kpi_string : KPI Mysql에 저장하는 용도
 #  report_robot_status : 전의 코드는 Redis에 저장하고, get API를 통해 Redis에서 가져와서 AJAX해서 페이지가 가져감.
+
+
+@app.route("/kpi/<sn>")
+def get_kpi(sn):
+    sql = "SELECT kpi0,kpi1,kpi2,kpi3,kpi4 FROM robots WHERE sn = \"%s\" " % sn
+    res = MySQL.select(sql, multi=False)
+    print("Res : ", res)
+    lis = []
+    if res is not None:
+        for k, v in res.items():
+            if v is not None:
+                v = v.split(',')
+                k = {'sn': sn, 'kpi': v[0], 'label': v[1], 'period': v[2], 'key': v[3], 'axis': v[4]}
+            else:
+                k = {'sn': None, 'kpi': None, 'label': None, 'period': None, 'key': None, 'axis': None}
+            lis.append(k)
+    return jsonify(lis)
 
 
 # todo : Opdata Test 용도

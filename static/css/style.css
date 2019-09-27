@@ -533,6 +533,7 @@ hr {
 
 .event_view video {
   width: 488px;
+  background-color:#000;
 }
 
 .event_view .time span {
@@ -552,7 +553,7 @@ hr {
 }
 
 .event_history .section_title {
-  padding: 24px 0;
+  padding: 24px 0 15px;
 }
 
 .event_history .section_title img {
@@ -687,7 +688,7 @@ hr {
 }
 
 #dataTable {
-  width: 550px; !important;
+  width: 550px;
 }
 
 .dataTable thead tr th {
