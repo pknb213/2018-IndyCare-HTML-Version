@@ -195,52 +195,21 @@
                             <h3>Robot State</h3>
                             <div class="robot_state_noti">
                                 <ul>
-                                    <li>
-                                        <img src="../static/img/icon_busy.svg" alt="icon_busy"/>
-                                        <span>BUSY</span>
+                                    <li id="busy_li">
                                     </li>
-                                    <li>
-                                        <img src="../static/img/icon_ready.svg" alt="icon_ready"/>
-                                        <span>READY</span>
+                                    <li id="ready_li">
                                     </li>
-                                    <li>
-                                        <img
-                                                src="../static/img/icon_collision.svg"
-                                                alt="icon_collision"
-                                        />
-                                        <span>COLLISON</span>
+                                    <li id="collision_li">
                                     </li>
-                                    <li>
-                                        <img src="../static/img/icon_error.svg" alt="icon_error"/>
-                                        <span>ERROR</span>
+                                    <li id="error_li">
                                     </li>
-                                    <li>
-                                        <img
-                                                src="../static/img/icon_state_stop.svg"
-                                                alt="icon_state_stop"
-                                        />
-                                        <span>PROGRAM STATE</span>
+                                    <li id="program_state_li">
                                     </li>
-                                    <li>
-                                        <img
-                                                src="../static/img/icon_energency.svg"
-                                                alt="icon_energency"
-                                        />
-                                        <span>EMERGENCY</span>
+                                    <li id="emergency_li">
                                     </li>
-                                    <li>
-                                        <img
-                                                src="../static/img/icon_report_connected.svg"
-                                                alt="icon_report_connected"
-                                        />
-                                        <span>ROBOT CONNECTED</span>
+                                    <li id="report_connected_li">
                                     </li>
-                                    <li>
-                                        <img
-                                                src="../static/img/icon_server_connected.svg"
-                                                alt="icon_server_connected"
-                                        />
-                                        <span>SERVER CONNECTED</span>
+                                    <li id="server_connected_li">
                                     </li>
                                 </ul>
                             </div>
@@ -258,14 +227,7 @@
                             </div>
                             <div class="time">
                                 <img src="../static/img/icon-time.svg" alt="icon_time"/>
-                                <span>2019.05.15 11:22:26</span>
                             </div>
-                            {#<video id="dashcam" controls="controls">
-                                <source
-                                        src="../static/img/The_Power_of_Teamwork_-_Funny_Animation.mp4"
-                                        type="video/mp4"
-                                />
-                            </video>#}
                             <video id="clip" width="350" height="280" controls loop muted autoplay></video>
                         </div>
 
@@ -288,63 +250,39 @@
                                             <span class="close">&times;</span>
                                             <div class="history_table">
                                                 <h2>event_history</h2>
-                                                <table>
+                                                <table id="dataTable_history" class="">
+                                                    <thead>
                                                     <tr>
                                                         <th>DATE</th>
                                                         <th>EVENT</th>
                                                         <th>LOG</th>
                                                     </tr>
-                                                    <tr>
-                                                        <td>2019-05-22 10:19:39</td>
-                                                        <td>emergency stop</td>
-                                                        <td>
-                                                            <img
-                                                                    src="../static/img/icon-download.svg"
-                                                                    alt="icon_download"
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2019-05-22 10:19:39</td>
-                                                        <td>emergency stop</td>
-                                                        <td>
-                                                            <img
-                                                                    src="../static/img/icon-download.svg"
-                                                                    alt="icon_download"
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2019-05-22 10:19:39</td>
-                                                        <td>emergency stop</td>
-                                                        <td>
-                                                            <img
-                                                                    src="../static/img/icon-download.svg"
-                                                                    alt="icon_download"
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2019-05-22 10:19:39</td>
-                                                        <td>emergency stop</td>
-                                                        <td>
-                                                            <img
-                                                                    src="../static/img/icon-download.svg"
-                                                                    alt="icon_download"
-                                                            />
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2019-05-22 10:19:39</td>
-                                                        <td>emergency stop</td>
-                                                        <td>
-                                                            <img
-                                                                    src="../static/img/icon-download.svg"
-                                                                    alt="icon_download"
-                                                            />
-                                                        </td>
-                                                    </tr>
+                                                    </thead>
                                                 </table>
+                                                <script type="text/javascript">
+                                                    // $.fn.dataTable.ext.errMode = 'none';
+                                                    $(document).ready(function () {
+                                                        $('#dataTable_history').DataTable({
+                                                            width: "600px",
+                                                            processing: true,
+                                                            searching: false,
+                                                            paging: false,
+                                                            lengthChange: false,
+                                                            bInfo: false,
+                                                            ajax: {
+                                                                "url": "/list/events2/{{ sn }}",
+                                                                "type": "GET",
+                                                                "dataSrc": "",
+                                                            },
+                                                            columns: [
+                                                                {"data": "occurrence_time"},
+                                                                {"data": "sn"},
+                                                                {"data": "down"}
+                                                            ],
+                                                            order: [[0, 'desc']]
+                                                        });
+                                                    });
+                                                </script>
                                             </div>
                                         </div>
                                     </div>
@@ -434,15 +372,14 @@
                                                             time: {
                                                                 parser: 'YYYY-MMM-D h:mm:ss:',
                                                                 unit: 'minute',
-                                                                unitStepSize: 10,
+                                                                unitStepSize: 15,
                                                                 round: 'minute',
                                                                 displayFormat:{
                                                                     hour: 'MMM-D h:mm A'
                                                                 }
                                                             },
                                                             ticks: {
-                                                                autoSkip: true,
-                                                                source: 'auto'
+                                                                autoSkip: true
                                                             }
                                                         }],
                                                         yAxes: [{
@@ -615,24 +552,6 @@
                                 </script>
                             </div>
                         </diV>
-                        <!-- <div class="chart_section">
-                          <h3>Analog Input [a01]</h3>
-                          <div>
-                            <img src="../static/img/chart_ex3.png" alt="WorK_Count_cahrt" />
-                          </div>
-                        </div>
-                        <div class="chart_section">
-                          <h3>Analog Input (a00)</h3>
-                          <div>
-                            <img src="../static/img/chart_ex4.png" alt="WorK_Count_cahrt" />
-                          </div>
-                        </div>
-                        <div class="chart_section">
-                          <h3>Temperature[TMP2]</h3>
-                          <div>
-                            <img src="../static/img/chart_ex5.png" alt="WorK_Count_cahrt" />
-                          </div>
-                        </div> -->
                     </div>
                 </div>
                 <!-- //tab_robot_information -->
@@ -660,6 +579,8 @@
 <script src="../static/js/video.js"></script>
 <script src="../static/js/more_modal.js"></script>
 <script src="../static/js/Chart.js"></script>
+<script src="../static/js/robot_state.js"></script>
+<script src="../static/js/myFunction.js"></script>
 <script>
     function get_kpi() {
         let arr = [];
@@ -681,12 +602,16 @@
         load_clip('D1234');
         load_opdata(kpi[0]);
         load_temp_opdata(kpi[1]);
+        update_robot_state('D1234');
+        current_date();
         setInterval(() => {
             load_clip('D1234');
         }, 30000);
         setInterval(() => {
             load_opdata(kpi[0]);
             load_temp_opdata(kpi[1]);
+            update_robot_state('D1234');
+            current_date();
         }, 10000);
     });
 </script>

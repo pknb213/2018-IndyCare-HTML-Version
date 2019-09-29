@@ -16,15 +16,20 @@ def show_reporter_info():
 def test_process():
     # todo : Test
     s = requests.Session()
-    s.post(URL + '/login', {'id': 'D1234', 'pwd': 'D1234'})
+    # s.post(URL + '/login', {'id': 'D1234', 'pwd': 'D1234'})
+    sn = 'D1234'
     i = 0
     while True:
         try:
             dic = {'mtype': 1, 'msg': 'kpi0', 'mdata': 1}
-            s.post(URL + '/opdata', json=dic)
+            s.post(URL + '/opdata/' + sn, json=dic)
             time.sleep(1)
             dic = {'mtype': 2, 'msg': 'kpi1', 'mdata': str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))+','+str(random.randrange(20.0, 50.0))}
-            s.post(URL + '/opdata', json=dic)
+            s.post(URL + '/opdata/' + sn, json=dic)
+            dic = {'busy': random.randrange(0, 2), 'ready': random.randrange(0, 2), 'collision': random.randrange(0, 2),
+                   'emergency': random.randrange(0, 2), 'error': random.randrange(0, 2), 'program_state': random.randrange(0, 2),
+                   'isServerConnected': random.randrange(0, 2), 'isReporterRunning': random.randrange(0, 3)}
+            s.post(URL + '/report/robot/state/' + sn, json=dic)
         except requests.exceptions.ConnectionError:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!")
@@ -89,7 +94,7 @@ def task_server(q):
             continue
 
 
-def reporter(q):
+def reporter(q, sn):
     while True:
         try:
             # Create SHM Object
@@ -116,7 +121,7 @@ def reporter(q):
             mtype, msg, mdata = q.get()
             if mtype == 1:
                 print("<Reporter> Received Count( %s %s )" % (mtype, msg))
-                POST(s, '/report_robot_opdata', json=json.dumps({msg: 1.0}))
+                POST(s, '/report_robot_opdata/' + sn, json=json.dumps({msg: 1.0}))
             elif mtype == 2:
                 print("<Reporter> Received Mean( %d %s %s )" % (mtype, msg, mdata))
                 _dic = {}
@@ -127,10 +132,10 @@ def reporter(q):
                 else:
                     _dic[msg] = float(mdata)
                 print("<Reporter> DIC : ", _dic)
-                POST(s, '/report_robot_opdata', json=json.dumps(_dic))
+                POST(s, '/report_robot_opdata/' + sn, json=json.dumps(_dic))
             elif mtype == 100:
                 print("<Reporter> KPI configuration( %s, %s )" % (msg, mdata))
-                POST(s, '/report_kpi_string', json=json.dumps({msg: mdata}))
+                POST(s, '/report_kpi_string/' + sn, json=json.dumps({msg: mdata}))
             else:
                 pass
         # Todo : Reporter State Check
@@ -202,21 +207,25 @@ if __name__ == '__main__':
         ROBOT_SERIAL_NUMBER = sn
         print("Robot SerialNumber : ", shm.get_serial_number_value(shm))
         if f1 is True and f2 is True and sn:
-            time.sleep(5)
+            s = requests.Session()
+            s.post(URL + '/reporter/robot/info', json={'sn': ROBOT_SERIAL_NUMBER})
+            time.sleep(0.5)
+            s.close()
+            time.sleep(2.5)
             break
 
     show_reporter_info()
     q = Queue()
-    p1 = Process(target=event_log_uploader, args=( ))
+    p1 = Process(target=event_log_uploader, args=())
     p2 = Process(target=clip_uploader, args=())
-    p3 = Process(target=task_server, args=(q,))
+    p3 = Process(target=task_server, args=(q, ROBOT_SERIAL_NUMBER))
     p4 = Process(target=test_process, args=())
     p1.start()
     p2.start()
     p3.start()
     p4.start()
     time.sleep(1)
-    reporter(q)
+    reporter(q, sn)
     q.close()
     q.join_thread()
     p4.join()

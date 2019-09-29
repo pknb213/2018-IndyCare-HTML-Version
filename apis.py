@@ -7,6 +7,19 @@ from utils import *
 #     cache.hset(sn, 'clip', 0 if cam else -1)  # cam 값이 있으면 0, 없으면 -1
 
 
+@app.route("/date/now")
+def current_date():
+    print(datetime.now().astimezone(KST).strftime(fmtAll))
+    return datetime.now().astimezone(KST).strftime(fmtAll)
+
+
+@app.route("/reporter/robot/info", methods=["POST"])
+def add_robot_info_from_reporter():
+    sql = "INSERT INTO robots(sn) VALUE \"%s\"" % request.json['sn']
+    MySQL.insert(sql)
+    return Response("ok")
+
+
 @app.route("/ping")
 def ping():
     print("Pong")
@@ -145,6 +158,24 @@ def get_event_list_for_datatable(sn):
     return jsonify(res)
 
 
+@app.route("/list/events2/<sn>")
+def get_event_list_for_datatable2(sn):
+    # todo : DataTable에 출력할 용도인 API
+    sql = "SELECT idx, json, file, sn, occurrence_time FROM events WHERE sn=\"%s\" " % sn
+    res = MySQL.select(sql, True)
+
+    if not res: return jsonify('')
+    for i in res:
+        a = i['json'].replace("\'", "\"")
+        a = a.replace("\\", "\\\\")
+        a = json.loads(a)
+        a = a['log'].split('\\')
+        i['down'] = '<a class=c_hyper href=/file/event/%s/%s>' \
+                    '<img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu" /></a>' % (a[-1], i['sn'])
+
+    return jsonify(res)
+
+
 @app.route("/file/event/<filename>/<sn>", methods=["GET", "POST"])
 def get_event_file(filename, sn):
     # todo : 버튼 클릭했을 때, 불려지는 API로 그리고 나서 SSE로 reporter에게 파일 달라고 함
@@ -178,8 +209,25 @@ def get_event_file(filename, sn):
     return Response('Error')
 
 
+@app.route("/report/robot/state/<sn>", methods=["POST"])
+def report_robot_state(sn):
+    sql = "INSERT INTO robot_states(serial_number, state) VALUES (\"%s\", \"%s\") " \
+          % (sn, request.json)
+    MySQL.insert(sql)
+    return Response("ok")
+
+
+@app.route("/robot/state/<sn>")
+def robot_state(sn):
+    sql = "SELECT state FROM robot_states WHERE serial_number = \"%s\" ORDER BY date DESC LIMIT 1 " \
+          % sn
+    res = MySQL.select(sql, False)
+    print("Res : ", res)
+    return jsonify(res['state'])
+
+
 @app.route("/opdata/<sn>/<key>/recent/<period>")
-@app.route("/opdata", methods=["POST"])
+@app.route("/opdata/<sn>", methods=["POST"])
 def opdate(sn='TEST1234', key='', period=''):
     if request.method == 'GET':
         print("SN : %s, Key : %s, Time : %s" % (sn, key, datetime.now().strftime(fmtAll)))
@@ -187,8 +235,8 @@ def opdate(sn='TEST1234', key='', period=''):
             sql = "SELECT concat(" \
                   "date(opdatas.x) , ' ', sec_to_time(time_to_sec(x)-time_to_sec(x)%%(15*60)+(15*60))) as division_date, " \
                   "COUNT(y) from opdatas " \
-                  "WHERE x >= \"%s\" AND x < \"%s\" group by division_date" \
-                  % ((datetime.utcnow() - timedelta(minutes=60)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
+                  "WHERE x >= \"%s\" AND x < \"%s\" AND serial_number = \"%s\" group by division_date" \
+                  % ((datetime.utcnow() - timedelta(minutes=60)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll), sn)
             res = MySQL.select(sql)
             print("Res : ", res)
             if res is not False:
@@ -198,8 +246,8 @@ def opdate(sn='TEST1234', key='', period=''):
                     del i['division_date'], i['COUNT(y)']
         elif key == 'mean':
             sql = "SELECT x, msg, joint0, joint1, joint2, joint3, joint4, joint5 FROM temperature_opdatas " \
-                  "WHERE x >= \"%s\" AND x < \"%s\" ORDER by x DESC LIMIT 50" \
-                  % ((datetime.utcnow() - timedelta(hours=1)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
+                  "WHERE x >= \"%s\" AND x < \"%s\" AND serial_number = \"%s\" ORDER by x DESC LIMIT 50" \
+                  % ((datetime.utcnow() - timedelta(hours=1)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll), sn)
             res = MySQL.select(sql)
             # print("Res : ", res)
 
@@ -210,7 +258,7 @@ def opdate(sn='TEST1234', key='', period=''):
             ez = []
             fz = []
 
-            if res is None: return jsonify(res)
+            if res is False: return jsonify(res)
             for i in res:
                 a = {'x': i['x'].strftime(fmtAll), 'y': i['joint0']}
                 b = {'x': i['x'].strftime(fmtAll), 'y': i['joint1']}
@@ -236,14 +284,15 @@ def opdate(sn='TEST1234', key='', period=''):
         # mtype, msg, mdata
         if request.json['mtype'] is 1:
             print(request.json)
-            sql = "INSERT INTO opdatas(msg, y) VALUES (\"%s\", \"%s\") " % (request.json['msg'], request.json['mdata'])
+            sql = "INSERT INTO opdatas(msg, y, serial_number) " \
+                  "VALUES (\"%s\", \"%s\", \"%s\") " % (request.json['msg'], request.json['mdata'], sn)
             MySQL.insert(sql)
         elif request.json['mtype'] is 2:
             print(request.json)
             temp = request.json['mdata'].split(',')
-            sql = "INSERT INTO temperature_opdatas(msg, joint0, joint1, joint2, joint3, joint4, joint5) " \
-                  "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\") " \
-                  % (request.json['msg'], temp[0], temp[1], temp[2], temp[3], temp[4], temp[5])
+            sql = "INSERT INTO temperature_opdatas(msg, serial_number, joint0, joint1, joint2, joint3, joint4, joint5) " \
+                  "VALUES (\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\") " \
+                  % (request.json['msg'], sn, temp[0], temp[1], temp[2], temp[3], temp[4], temp[5])
             MySQL.insert(sql)
         else:
             print("Insert Fail : ", request.json)
@@ -255,12 +304,6 @@ def opdate(sn='TEST1234', key='', period=''):
 @app.route("/reporter/kpi", methods=["POST"])
 def post_reporter_kpi():
     pass
-
-
-@app.route("/reporter/robot/status", methods=["POST"])
-def post_reporter_robot_status():
-    pass
-
 
 @app.route("/robot/status")
 def get_robot_status():

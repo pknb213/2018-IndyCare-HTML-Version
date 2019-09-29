@@ -11,7 +11,7 @@ def set_proc_name(newname):
     libc.prctl(15, byref(buff), 0, 0, 0)
 
 
-set_proc_name(b'IndyCAREReport')
+# set_proc_name(b'IndyCAREReport')
 
 
 def check_task_manager():
