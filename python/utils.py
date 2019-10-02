@@ -10,6 +10,7 @@ from pytz import timezone
 
 KST = timezone('Asia/Seoul')
 fmtAll = '%Y-%m-%d %H:%M:%S'
+fmt = '%Y-%m-%d'
 
 # REDIS_URL = '13.209.42.91'
 REDIS_URL = 'localhost'
@@ -49,7 +50,7 @@ def load_user(id):
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == 'GET':
-        return render_template("home.html")
+        return render_template("robot_list.html")
     if current_user.is_authenticated: return redirect(url_for("deployment"))
     check_robot(request.form['id'], request.form['pwd'])
     user = Robot(request.form['id'])
@@ -135,7 +136,36 @@ class MySQL:
             raise Exception("Please, parameter must be String !")
 
 
+STOP_CODE = {
+    0: 'emergency stop',
+    1: 'collision',
+    2: 'position limit',
+    3: 'velocity limit',
+    4: 'motor state error',
+    5: 'torque limit',
+    6: 'connection lost',
+    7: 'position error',
+    8: 'end-tool stop',
+    9: 'singular',
+    10: 'over-current',
+    12: 'position limit closed',
+    13: 'velocity limit closed',
+    14: 'singular closed',
+    15: 'torque limit closed',
+    61: 'computation time limit',
+    62: 'control task time limit',
+    90: 'reset',
+    91: 'reset hard',
+    94: 'reset failed',
+    95: 'reset special',
+    99: 'unknown'
+}
 
+
+def get_robot_code_description(code):
+    if code in STOP_CODE:
+        return STOP_CODE[code]
+    return 'undefined'
 
 
 

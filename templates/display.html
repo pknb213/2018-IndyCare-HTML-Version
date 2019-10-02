@@ -7,13 +7,11 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>IndyCARE - Robot Detail</title>
-
+    <!-- Style -->
     <link rel="shortcut icon" href="../static/img/indycare_favicon.ico"/>
     <link rel="stylesheet" href="../static/css/style.css"/>
-    <!-- <link rel="stylesheet" href="/css/bootstrap.css" /> -->
     <!-- Jquery -->
     <script src="../static/js/libs/jquery.min.js"></script>
-    {#<script type="text/javascript" src="https://cdn.datatables.net/w/dt/dt-1.10.18/datatables.min.js"></script>#}
 </head>
 
 <body>
@@ -39,7 +37,7 @@
                     <span>admin</span>
                 </div>
                 <div class="profile_menu">
-                    <a href="#">
+                    <a href="javascript:history.back()">
                         <img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu"/>
                     </a>
                 </div>
@@ -48,30 +46,30 @@
             <nav class="nav_menu">
                 <ul class="sub_menu">
                     <li class="sub">
-                        <a href="#">
+                        <a href="javascript:history.back()">
                             <img src="../static/img/icon-user.svg" alt="icon_User"/>
                             <span>User</span>
                         </a>
                         <ul>
                             <li>
-                                <a href="#">User<br/>List</a>
+                                <a href="javascript:history.back()">User<br/>List</a>
                             </li>
                             <li>
-                                <a href="#">User<br/>Register</a>
+                                <a href="javascript:history.back()">User<br/>Register</a>
                             </li>
                         </ul>
                     </li>
                     <li class="sub">
-                        <a href="#">
+                        <a href="javascript:history.back()">
                             <img src="../static/img/icon-company.svg" alt="icon_Company"/>
-                            <span>Company</span>
+                            <span>Robots</span>
                         </a>
-                        <ul>
+                        <ul hidden>
                             <li>
-                                <a href="#">Company<br/>List</a>
+                                <a href="javascript:history.back()">Company<br/>List</a>
                             </li>
                             <li>
-                                <a href="#">Company<br/>Register</a>
+                                <a href="javascript:history.back()">Company<br/>Register</a>
                             </li>
                         </ul>
                     </li>
@@ -104,19 +102,12 @@
                                 <li class="header_search">
                                     <label for="search">
                                         <img src="../static/img/icon_search.svg" alt="icon_search"/>
-                                        <input
-                                                type="text"
-                                                placeholder="search for..."
-                                                name="search"
-                                        />
+                                        <input type="text" placeholder="search for..." name="search"/>
                                         <input type="submit" class="blind"/>
                                     </label>
                                 </li>
                                 <li>
-                                    <a
-                                            href="http://helpdesk.neuromeka.com/projects/forum/boards"
-                                            target="_blank"
-                                    >
+                                    <a href="http://helpdesk.neuromeka.com/projects/forum/boards" target="_blank">
                                         <button>문의하기</button>
                                     </a>
                                 </li>
@@ -136,12 +127,12 @@
                     <h1>ROBOT DETAIL</h1>
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="#">HOME</a></li>
-                            <li><a href="#">COMPANY</a></li>
-                            <li><a href="#">COMPANY List</a></li>
-                            <li><a href="#">SITE LIST</a></li>
-                            <li><a href="#">ROBOT LIST</a></li>
-                            <li class="on"><a href="#">ROBOT DETAIL</a></li>
+                            <li><a href="javascript:history.back()">HOME</a></li>
+                            <li><a href="javascript:history.back()">COMPANY</a></li>
+                            <li><a href="javascript:history.back()">COMPANY List</a></li>
+                            <li><a href="javascript:history.back()">SITE LIST</a></li>
+                            <li><a href="javascript:history.back()">ROBOT LIST</a></li>
+                            <li class="on"><a href="javascript:history.back()">ROBOT DETAIL</a></li>
                         </ul>
                     </div>
                 </div>
@@ -150,17 +141,10 @@
 
             <!-- tab_menu -->
             <div class="tab_menu">
-                <button
-                        class="tablinks"
-                        onclick="openMenu(event, 'Robot_Information')"
-                        id="defaultOpen"
-                >
+                <button class="tablinks" onclick="openMenu(event, 'Robot_Information')" id="defaultOpen">
                     Robot Information
                 </button>
-                <button
-                        class="tablinks"
-                        onclick="openMenu(event, 'Chart_Information')"
-                >
+                <button class="tablinks" onclick="openMenu(event, 'Chart_Information')">
                     Chart Information
                 </button>
             </div>
@@ -177,14 +161,11 @@
                             <div class="model_name">
                                 <span>Indy7</span>
                                 <button>
-                                    <img
-                                            src="../static/img/icon_server_customer.svg"
-                                            alt="icon_customer"
-                                    />
+                                    <img src="../static/img/icon_server_customer.svg" alt="icon_customer"/>
                                     <span>고객사정보</span>
                                 </button>
                             </div>
-                            <div class="snnumber"><span>S/N D11924I07T02</span></div>
+                            <div class="snnumber"></div>
                         </div>
                     </div>
                     <!-- //robot info_img -->
@@ -195,22 +176,14 @@
                             <h3>Robot State</h3>
                             <div class="robot_state_noti">
                                 <ul>
-                                    <li id="busy_li">
-                                    </li>
-                                    <li id="ready_li">
-                                    </li>
-                                    <li id="collision_li">
-                                    </li>
-                                    <li id="error_li">
-                                    </li>
-                                    <li id="program_state_li">
-                                    </li>
-                                    <li id="emergency_li">
-                                    </li>
-                                    <li id="report_connected_li">
-                                    </li>
-                                    <li id="server_connected_li">
-                                    </li>
+                                    <li id="busy_li"></li>
+                                    <li id="ready_li"></li>
+                                    <li id="collision_li"></li>
+                                    <li id="error_li"></li>
+                                    <li id="program_state_li"></li>
+                                    <li id="emergency_li"></li>
+                                    <li id="report_connected_li"></li>
+                                    <li id="server_connected_li"></li>
                                 </ul>
                             </div>
                         </div>
@@ -233,10 +206,7 @@
 
                         <div class="event_history">
                             <div class="section_title">
-                                <img
-                                        src="../static/img/icon-history.svg"
-                                        alt="icon_event_history"
-                                />
+                                <img src="../static/img/icon-history.svg" alt="icon_event_history"/>
                                 <h3>Event History</h3>
                                 <div class="more">
                                     <button id="history_Btn">
@@ -250,6 +220,7 @@
                                             <span class="close">&times;</span>
                                             <div class="history_table">
                                                 <h2>event_history</h2>
+                                                <!-- Data Table For Modal -->
                                                 <table id="dataTable_history" class="">
                                                     <thead>
                                                     <tr>
@@ -259,36 +230,13 @@
                                                     </tr>
                                                     </thead>
                                                 </table>
-                                                <script type="text/javascript">
-                                                    // $.fn.dataTable.ext.errMode = 'none';
-                                                    $(document).ready(function () {
-                                                        $('#dataTable_history').DataTable({
-                                                            width: "600px",
-                                                            processing: true,
-                                                            searching: false,
-                                                            paging: false,
-                                                            lengthChange: false,
-                                                            bInfo: false,
-                                                            ajax: {
-                                                                "url": "/list/events2/{{ sn }}",
-                                                                "type": "GET",
-                                                                "dataSrc": "",
-                                                            },
-                                                            columns: [
-                                                                {"data": "occurrence_time"},
-                                                                {"data": "sn"},
-                                                                {"data": "down"}
-                                                            ],
-                                                            order: [[0, 'desc']]
-                                                        });
-                                                    });
-                                                </script>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div>
+                                <!-- Data Table For Modal -->
                                 <table id="dataTable" class="">
                                     <thead>
                                     <tr>
@@ -299,30 +247,6 @@
                                     </thead>
                                 </table>
                                 <script type="text/javascript">
-                                    // $.fn.dataTable.ext.errMode = 'none';
-                                    $(document).ready(function () {
-                                        $('#dataTable').DataTable({
-                                            processing: true,
-                                            searching: false,
-                                            paging: false,
-                                            lengthChange: false,
-                                            bInfo: false,
-                                            scrollXInner: '550px',
-                                            scrollX: '530px',
-                                            scrollY: false,
-                                            ajax: {
-                                                "url": "/list/events/{{ sn }}",
-                                                "type": "GET",
-                                                "dataSrc": "",
-                                            },
-                                            columns: [
-                                                {"data": "occurrence_time"},
-                                                {"data": "sn"},
-                                                {"data": "down"}
-                                            ],
-                                            order: [[0, 'desc']]
-                                        });
-                                    });
                                 </script>
                             </div>
                         </div>
@@ -332,224 +256,14 @@
                         <div class="chart_section">
                             <h3>WorK Count[CNT]</h3>
                             <div class="chart_cnt">
-                                {#<img src="../static/img/chart_ex01.png" alt="WorK_Count_cahrt"/>#}
                                 <canvas id="myCountChart"></canvas>
-                                <script type="text/javascript">
-                                    function load_opdata(kpi) {
-                                        $.ajax({
-                                            url: "/opdata/" + kpi.sn + '/' + kpi.key + '/recent/' + kpi.period,
-                                            dataType: "json"
-                                        }).done(function (res) {
-                                            console.log(res);
-                                            let data = {
-                                                label: 'Count',
-                                                data: res,
-                                                fill: true,
-                                                backgroundColor: "rgba(255,99,132,0.2)",
-                                                borderColor: "rgba(255,99,132)",
-                                                borderWidth: 1
-                                            };
-                                            let cfg = {
-                                                type: 'bar',
-                                                data: {datasets: [data]},
-                                                options: {
-                                                    animation: false,
-                                                    responsive: true,
-                                                    maintainAspectRatio: false,
-                                                    responsiveAnimationDuration: 0,
-                                                    tooltips: {
-                                                        mode: 'index',
-                                                        intersect: false,
-                                                    },
-                                                    hover: {
-                                                        mode: 'nearest',
-                                                        intersect: false,
-                                                        animationDuration: 0
-                                                    },
-                                                    scales: {
-                                                        xAxes: [{
-                                                            type: 'time',
-                                                            time: {
-                                                                parser: 'YYYY-MMM-D h:mm:ss:',
-                                                                unit: 'minute',
-                                                                unitStepSize: 15,
-                                                                round: 'minute',
-                                                                displayFormat:{
-                                                                    hour: 'MMM-D h:mm A'
-                                                                }
-                                                            },
-                                                            ticks: {
-                                                                autoSkip: true
-                                                            }
-                                                        }],
-                                                        yAxes: [{
-                                                            scaleLabel: {
-                                                                display: true,
-                                                                labelString: 'Work Count'
-                                                            },
-                                                            ticks: {
-                                                                beginAtZero: true,
-                                                                stepValue: 5,
-                                                                steps: 10
-                                                            }
-                                                        }],
-                                                        tooltips: {
-                                                            intersect: false,
-                                                            mode: 'index',
-                                                            callbacks: {
-                                                                label: function (tooltipItem, myData) {
-                                                                    var label = myData.datasets[tooltipItem.datasetIndex].label || '';
-                                                                    if (label) {
-                                                                        label += ': ';
-                                                                    }
-                                                                    label += parseFloat(tooltipItem.value).toFixed(2);
-                                                                    return label;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            };
-
-                                            let ctx = document.getElementById('myCountChart').getContext('2d');
-                                            ctx.canvas.width = 400;
-                                            ctx.canvas.height = 250;
-                                            let myCountChart = new Chart(ctx, cfg);
-                                        });
-                                    }
-                                </script>
                             </div>
                         </div>
 
                         <diV class="chart_section">
                             <h3>Temperature[TMP]</h3>
                             <div class="chart_tmp">
-                                {# <img src="../static/img/chart_ex02.png" alt"WorK_Count_cahrt"/>=#}
                                 <canvas id="myTempChart"></canvas>
-                                <script type="text/javascript">
-                                    function load_temp_opdata(kpi) {
-                                        $.ajax({
-                                            url: "/opdata/" + kpi.sn + '/' + kpi.key + '/recent/' + kpi.period,
-                                            dataType: "json"
-                                        }).done(function (res) {
-                                            console.log(res);
-                                            let data = [
-                                                {
-                                                    label: 'Joint 0',
-                                                    data: res[0],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(255,99,132,0.2)",
-                                                    borderColor: "rgba(255,99,132)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                },
-                                                {
-                                                    label: 'Joint 1',
-                                                    data: res[1],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(255,205,86,0.2)",
-                                                    borderColor: "rgba(255,205,86)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                },
-                                                {
-                                                    label: 'Joint 2',
-                                                    data: res[2],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(75,192,192,0.2)",
-                                                    borderColor: "rgba(75,192,192)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                },
-                                                {
-                                                    label: 'Joint 3',
-                                                    data: res[3],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(255,159,64,0.2)",
-                                                    borderColor: "rgba(255,159,64)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                },
-                                                {
-                                                    label: 'Joint 4',
-                                                    data: res[4],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(54,162,235,0.2)",
-                                                    borderColor: "rgba(54,162,23)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                },
-                                                {
-                                                    label: 'Joint 5',
-                                                    data: res[5],
-                                                    fill: false,
-                                                    backgroundColor: "rgba(255,99,132,0.2)",
-                                                    borderColor: "rgba(255,99,132)",
-                                                    borderWidth: 1,
-                                                    lineTension: 0.2,
-                                                    pointRadius: 1
-                                                }
-                                            ];
-                                            let cfg = {
-                                                type: 'line',
-                                                data: {datasets: data},
-                                                options: {
-                                                    animation: true,
-                                                    responsive: true,
-                                                    maintainAspectRatio: false,
-                                                    responsiveAnimationDuration: 0,
-                                                    tooltips: {
-                                                        mode: 'index',
-                                                        intersect: false,
-                                                    },
-                                                    hover: {
-                                                        mode: 'nearest',
-                                                        intersect: true,
-                                                        animationDuration: 0
-                                                    },
-                                                    scales: {
-                                                        xAxes: [{
-                                                            type: 'time',
-                                                            time: {
-                                                                parser: 'YYYY-MMM-D h:mm:ss:',
-                                                                unit: 'second',
-                                                                unitStepSize: 30,
-                                                                round: 'second',
-                                                                displayFormat:{
-                                                                    hour: 'MMM-D h:mm A'
-                                                                }
-                                                            },
-                                                            ticks: {
-                                                                autoSkip: true,
-                                                                source: 'auto'
-                                                            }
-                                                        }],
-                                                        yAxes: [{
-                                                            scaleLabel: {
-                                                                labelString: 'Temperature',
-                                                            },
-                                                            ticks: {
-                                                                beginAtZero: true,
-                                                                stepValue: 5,
-                                                                steps: 10
-                                                            }
-                                                        }]
-                                                    }
-                                                }
-                                            };
-
-                                            let TempCtx = document.getElementById('myTempChart').getContext('2d');
-                                            TempCtx.canvas.width = 1200;
-                                            TempCtx.canvas.height = 300;
-                                            let myTempChart = new Chart(TempCtx, cfg);
-                                        });
-                                    }
-                                </script>
                             </div>
                         </diV>
                     </div>
@@ -558,8 +272,42 @@
 
                 <!-- tab_chart_information -->
                 <div id="Chart_Information" class="tabcontent">
-                    <h3>Chart_Information</h3>
-                    <p>Chart_Information-----------</p>
+                    <div class="opdata_card"
+                         style="display: block; margin-bottom: 50px; height: 400px; background-color: white">
+                        <div style="display: inline-block;">
+                            <h3>Work Count</h3>
+                            <div>
+                                <canvas id='myCountChart_second'></canvas>
+                            </div>
+                        </div>
+                        <div style="display: inline-block;">
+                            <h3>Temperature</h3>
+                            <div>
+                                <canvas id="myTempChart_second"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="opdata_card_second"
+                         style="display: block; margin-bottom: 50px; height: 400px; background-color: white">
+                        <div style="display: inline-block; float: left;">
+                            <h3>Analog I/O</h3>
+                            <div style="width: 550px; height: 350px;">
+                                <canvas id="myAnalog"></canvas>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; float: left;">
+                            <h3>Analog I/O</h3>
+                            <div style="width: 550px; height: 350px;">
+                                <canvas id="myAnalog_second"></canvas>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; float: left;">
+                            <h3>Analog I/O</h3>
+                            <div style="width: 550px; height: 350px;">
+                                <canvas id="myAnalog_third"></canvas>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- //tab_chart_information -->
             </div>
@@ -572,7 +320,6 @@
 <!-- // page wrapper -->
 <!-- Plugin -->
 <script src="../static/js/libs/moment-develop/moment.js"></script>
-{#<script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>#}
 <script type="text/javascript" src="../static/DataTables/datatables.js"></script>
 <!-- Custom JavaScript -->
 <script src="../static/js/tab_nav.js"></script>
@@ -581,39 +328,36 @@
 <script src="../static/js/Chart.js"></script>
 <script src="../static/js/robot_state.js"></script>
 <script src="../static/js/myFunction.js"></script>
+<script src="../static/js/event_listener.js"></script>
+<script src="../static/js/chart_cfg.js"></script>
 <script>
-    function get_kpi() {
-        let arr = [];
-        $.ajax({
-            url: "/kpi/{{ sn }}",
-            type: "GET",
-            async: false,
-            success: (res) => {
-                arr = res
-            }
-        });
-
-        return arr;
-    }
-
     $(document).ready(() => {
-        let kpi = get_kpi('{{ sn }}');
+        const param = new URLSearchParams(document.location.search);
+        const sn = param.get('sn');
+        console.log(sn);
+        $(".snnumber").append("<span> SerialNumber :  " + sn + "<span>");
+        let kpi = get_kpi(sn);
         console.log(kpi);
-        load_clip('D1234');
-        load_opdata(kpi[0]);
-        load_temp_opdata(kpi[1]);
-        update_robot_state('D1234');
-        current_date();
+
+        current_date();                 // 현재 날짜 Ajax
+
+        create_chart_from_kpi(sn, kpi); // 차트 Ajax
+        load_clip(sn);                  // Clip Ajax
+        update_robot_state(sn);         // 로봇 상태 값 Ajax
+        data_table_for_history(sn);     // 더보기 데이터 테이블 Ajax
+        data_table(sn);                 // 메인 화면 데이터 테이블 Ajax
+        event_listener(sn);             // 이벤트 리스너
+
         setInterval(() => {
-            load_clip('D1234');
+            load_clip(sn);              // Clip 업데이트 용
+            refresh_chart_from_kpi(sn, kpi);   // 차트 업데이트 용
         }, 30000);
+
         setInterval(() => {
-            load_opdata(kpi[0]);
-            load_temp_opdata(kpi[1]);
-            update_robot_state('D1234');
-            current_date();
+            update_robot_state(sn);     // 로봇 상태 업데이트
         }, 10000);
     });
+
 </script>
 </body>
 </html>

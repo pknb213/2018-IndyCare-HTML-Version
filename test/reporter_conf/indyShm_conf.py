@@ -262,7 +262,7 @@ class ReporterState(ShmWrapper):
         return write(indyshm.shm.fd, pack('b', 0))
 
     @staticmethod
-    def get_all_scm_state(indyshm):
+    def get_all_reporter_state(indyshm):
         keys = ['is_reporter_running', 'is_server_connected']
         st = {}
         for key in keys: st[key] = getattr(indyshm, key)

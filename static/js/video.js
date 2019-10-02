@@ -14,7 +14,7 @@ function load_clip(sn) {
             console.log("Res : " + res);
             let video = document.getElementById("clip");
             let msg = document.getElementById('clip_msg');
-            if (res === 'ready') {
+            if (res === 'ready') {  // Test
                 video.style.display = 'block';
                 msg.style.display = 'none';
                 video.setAttribute('src', '/static/Chronograf.mp4');
@@ -24,19 +24,20 @@ function load_clip(sn) {
                 msg.style.display = 'none';
                 video.setAttribute('poster', '/clip/poster');
                 video.setAttribute('src', '/clip/' + sn + '/1?ts=' + new Date().valueOf());
-                console.log(video);
+                //console.log(video);
                 console.log("Clip : ok");
             } else {
                 $("#clip_msg").append("<p> Please, Refresh</p>");
                 video.style.display = 'block';
                 msg.style.display = 'block';
-                video.setAttribute('src', '');
+                video.setAttribute('poster', '"/clip/poster/error"');
+                console.log("Clip : else");
             }
         },
         error: (request, status, error) => {
             let video = document.getElementById("black_box_clip");
             let msg = document.getElementById("black_box_message");
-            video.style.display = 'none';
+            video.style.display = 'hidden';
             msg.style.display = 'block';
             $('#clip_msg').append("<p>" + status + "</p>");
             console.log("Load Black Box Fail " + request + status + error);

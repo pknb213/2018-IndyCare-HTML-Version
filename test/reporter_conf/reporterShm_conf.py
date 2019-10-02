@@ -2,9 +2,9 @@ from posix_ipc import MessageQueue, SharedMemory, O_CREAT
 from os import read, write, lseek, SEEK_SET
 from struct import pack, unpack, calcsize
 
-REPORTER_SHM = 'reporterShm'
-REPORTER_STATE_ADDR = 0
-REPORTER_SHM_SIZE = 20
+REPORTER_PROCESS_SHM = 'reporterShm'
+REPORTER_PROCESS_STATE_ADDR = 0
+REPORTER_PROCESS_SHM_SIZE = 20
 INDY_SHM_MGR_OFFSET = 64
 ROBOT_SN_LENGHT_MAX = 15  # Todo : ???
 
@@ -30,7 +30,7 @@ class ShmWrapperForReporter(object):
         write(self.shm.fd, pack(self.fmt, b1, b2, b3, b4, b5, s))
 
 
-class ReporterState(ShmWrapperForReporter):
+class ReporterProcessState(ShmWrapperForReporter):
     def __del__(self):
         lseek(self.shm.fd, self.offset, SEEK_SET)
         write(self.shm.fd, pack('b', 0))

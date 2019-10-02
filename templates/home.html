@@ -9,25 +9,26 @@
     <link rel="shortcut icon" href="../static/img/favicon.png">
     <title>Neuromeka Inventory Management</title>
     <!-- Icons -->
-    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
-    <link href="../static/css/simple-line-icons.css" rel="stylesheet">
+{#    <link href="../static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="../static/css/simple-line-icons.css" rel="stylesheet">#}
     <!-- Premium Icons -->
-    <link href="../static/css/glyphicons.css" rel="stylesheet">
+{#    <link href="../static/css/glyphicons.css" rel="stylesheet">
     <link href="../static/css/glyphicons-filetypes.css" rel="stylesheet">
-    <link href="../static/css/glyphicons-social.css" rel="stylesheet">
+    <link href="../static/css/glyphicons-social.css" rel="stylesheet">#}
     <!-- Main styles for this application -->
-    <link href="../static/css/style.css" rel="stylesheet">
+{#    <link href="../static/css/style.css" rel="stylesheet">#}
     <!-- Jquery -->
     <script src="../static/js/libs/jquery.min.js"></script>
 </head>
 <body>
-    <div class="container-fluid">
-        <table id="dataTable" width="100%" class="table table-striped table-lightfont">
+    <div>
+        <table id="dataTable">
             <thead>
                 <tr>
                     <th>SN</th>
                     <th>Site</th>
                     <th>Company</th>
+                    <th>KPI</th>
                     <th>Enter</th>
                 </tr>
             </thead>
@@ -37,7 +38,13 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('#dataTable').DataTable({
-            "processing": true,
+            processing: true,
+            searching: false,
+            paging: false,
+            lengthChange: false,
+            bInfo: false,
+            scrollXInner: '1000px',
+            scrollX: '1000px',
             ajax: {
                 "url": "/robots",
                 "type": "GET",
@@ -47,27 +54,28 @@
                 {"data": "sn"},
                 {"data": "site"},
                 {"data": "company"},
-                {"data": "Deploy"}
+                {"data": "kpi"},
+                {"data": "deploy"}
             ],
             order: [[0, 'desc']]
         });
     });
 </script>
 <!-- Bootstrap and necessary plugins -->
-<script src="../static/js/libs/tether.min.js"></script>
+{#<script src="../static/js/libs/tether.min.js"></script>
 <script src="../static/js/libs/bootstrap.min.js"></script>
-<script src="../static/js/libs/pace.min.js"></script>
+<script src="../static/js/libs/pace.min.js"></script>#}
 
 <!-- GenesisUI main scripts -->
-<script src="../static/js/app.js"></script>
+{#<script src="../static/js/app.js"></script>#}
 
 <!-- Plugins and scripts required by this views -->
-<script src="../static/js/libs/toastr.min.js"></script>
+{#<script src="../static/js/libs/toastr.min.js"></script>
 <script src="../static/js/libs/gauge.min.js"></script>
 <script src="../static/js/libs/moment.min.js"></script>
 <script src="../static/js/libs/daterangepicker.js"></script>
-<script src="../static/js/libs/Chart.min.js"></script>
-<script type="text/javascript" src="../static/js/libs/DataTable_Bootstrap4/datatables.min.js"></script>
+<script src="../static/js/libs/Chart.min.js"></script>#}
+<script type="text/javascript" src="../static/DataTables/datatables.js"></script>
 
 <!-- Custom scripts required by this view -->
 {#<script src="../static/js/views/main.js"></script>#}

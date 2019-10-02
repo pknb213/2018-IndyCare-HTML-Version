@@ -4,6 +4,7 @@ function update_robot_state(sn){
         url: "/robot/state/" + sn,
         dataType: 'json',
         success: (json)=>{
+            //console.log(json);
             json = eval("("+ json + ")");
             $("#busy_li").empty();
             $("#ready_li").empty();
@@ -40,11 +41,11 @@ function update_robot_state(sn){
                 $("#emergency_li").append("<img src='/static/img/active/icon_energency.svg' alt='icon_busy' /><span>EMERGENCY</span>");
             else
                 $("#emergency_li").append("<img src='/static/img/inactive/icon_energency.svg' alt='icon_busy' /><span>EMERGENCY</span>");
-            if (json['isServerConnected'] === 1)
+            if (json['is_server_connected'] === 1)
                 $("#report_connected_li").append("<img src='/static/img/active/icon_server_connected.svg' alt='icon_busy' /><span>SERVER CONNECTED</span>");
             else
                 $("#report_connected_li").append("<img src='/static/img/inactive/icon_server_connected.svg' alt='icon_busy' /><span>SERVER CONNECTED</span>");
-            if (json['isReporterRunning'] === 1)
+            if (json['is_reporter_running'] === 1)
                 $("#server_connected_li").append("<img src='/static/img/active/icon_report_connected.svg' alt='icon_busy' /><span>ROBOT CONNECTED</span>");
             else
                 $("#server_connected_li").append("<img src='/static/img/inactive/icon_report_connected.svg' alt='icon_busy' /><span>ROBOT CONNECTED</span>");

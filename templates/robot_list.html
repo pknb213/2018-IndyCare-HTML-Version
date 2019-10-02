@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>IndyCARE - Robot List</title>
+
+    <link rel="shortcut icon" href="../static/img/indycare_favicon.ico"/>
+    <link rel="stylesheet" href="../static/css/style.css"/>
+    <!-- <link rel="stylesheet" href="/css/bootstrap.css" /> -->
+    <script src="../static/js/libs/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- page wrapper -->
+<div id="wrapper">
+    <!-- sidebar -->
+    <div class="side_nav">
+        <div class="brand_logo">
+            <a href="http://indycare.neuromeka.com">
+                <img src="../static/img/img-logo.svg" alt="indycare_logo"/>
+                <div>
+                    <img src="../static/img/logo-indycare.svg" alt="indycare_text_logo"/>
+                </div>
+            </a>
+        </div>
+        <div>
+            <div class="user_info">
+                <img src="../static/img/img_profile.svg" alt="profile_img"/>
+                <div class="user_name">
+                    <span>admin</span>
+                </div>
+                <div class="user_roll">
+                    <span>admin</span>
+                </div>
+                <div class="profile_menu">
+                    <a href="#">
+                        <img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu"/>
+                    </a>
+                </div>
+            </div>
+
+            <nav class="nav_menu">
+                <ul class="sub_menu">
+                    <li class="sub">
+                        <a href="#">
+                            <img src="../static/img/icon-user.svg" alt="icon_User"/>
+                            <span>User</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="#">User<br/>List</a>
+                            </li>
+                            <li>
+                                <a href="#">User<br/>Register</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="sub">
+                        <a href="#">
+                            <img src="../static/img/icon-company.svg" alt="icon_Company"/>
+                            <span>Company</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <a href="#">Company<br/>List</a>
+                            </li>
+                            <li>
+                                <a href="#">Company<br/>Register</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="side_footer">
+                <a href="https://www.neuromeka.com" target="_blank">
+                    <img src="../static/img/neuromeka.svg" alt="neuromeka_homepage_logo"/>
+                    <span>HOME</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- //sidebar -->
+
+    <!-- content_wrap -->
+    <div class="contents_wrap clear">
+        <!-- header_wrap -->
+        <div class="header_wrap">
+            <!-- header_top -->
+            <div class="header_top">
+                <div class="top_menu">
+                    <div class="header_toggle">
+                        <img src="../static/img/icon-menu.svg" alt="_side_bar_toggle_menu"/>
+                    </div>
+
+                    <div class="item_wrap">
+                        <div class="header_item">
+                            <ul>
+                                <li class="header_search">
+                                    <label for="search">
+                                        <img src="../static/img/icon_search.svg" alt="icon_search"/>
+                                        <input type="text" placeholder="search for..." name="search"/>
+                                        <input type="submit" class="blind"/>
+                                    </label>
+                                </li>
+                                <li>
+                                    <a href="http://helpdesk.neuromeka.com/projects/forum/boards" target="_blank">
+                                        <button>문의하기</button>
+                                    </a>
+                                </li>
+                                <li>
+                                    <img src="../static/img/icon_noti.svg" alt="icon_noti"/>
+                                </li>
+                                <li>
+                                    <img src="../static/img/icon_log_out.svg" alt="icon_log_out"/>
+                                    <span>Log out</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header_title">
+                    <h1>ROBOT LIST</h1>
+                    <div class="breadcrumb">
+                        <ul>
+                            <li><a href="#">HOME</a></li>
+                            <li><a href="#">COMPANY</a></li>
+                            <li><a href="#">COMPANY LIST</a></li>
+                            <li><a href="#">SITE LIST</a></li>
+                            <li><a href="#">ROBOT LIST</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- //header_top -->
+
+            <!-- list_contents -->
+            <div class="list_contents_wrap">
+                <div class="list_contents_table">
+                    <table id="dataTable" class="table_style">
+                        <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Site</th>
+                            <th>Company</th>
+                            <th>KPI</th>
+                            <th>Enter</th>
+                        </tr>
+                        </thead>
+                    </table>
+                    <div>
+                    </div>
+                    <!-- //list_contents -->
+                </div>
+                <!-- //header_wrap -->
+            </div>
+            <!-- //content_wrap -->
+        </div>
+        <!-- // page wrapper -->
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#dataTable').DataTable({
+            processing: true,
+            searching: false,
+            paging: false,
+            lengthChange: false,
+            bInfo: false,
+            columnDefs: [
+                {'width': "15%", "targets": 0},
+                {'width': "20%", "targets": 0},
+                {'width': "20%", "targets": 0},
+                {'width': "30%", "targets": 0},
+                {'width': "15%", "targets": 0}
+            ],
+            ajax: {
+                "url": "/robots",
+                "type": "GET",
+                "dataSrc": "",
+            },
+            columns: [
+                {"data": "sn"},
+                {"data": "site"},
+                {"data": "company"},
+                {"data": "kpi"},
+                {"data": "deploy"}
+            ],
+            order: [[0, 'desc']]
+        });
+    });
+</script>
+<script type="text/javascript" src="../static/DataTables/datatables.js"></script>
+</body>
+
+</html>

@@ -8,13 +8,14 @@ def deployment(sn):
 
 @app.route("/")
 def home():
-    if not current_user.is_authenticated: return redirect(url_for('login'))
-    return render_template("home.html")
+    # if not current_user.is_authenticated: return redirect(url_for('login'))
+    return render_template("robot_list.html")
 
 
-@app.route("/test")
+@app.route("/display", methods=["GET"])
 def test():
-    return render_template("display.html", sn='D1234')
+    # print(request.args)
+    return render_template("display.html")
 
 
 
