@@ -12,3 +12,6 @@
 *.mp4
 .test/save-videos/
 venv/
+.static/js/libs_bk/*
+.static/DataTables/*
+.static/scss/*
