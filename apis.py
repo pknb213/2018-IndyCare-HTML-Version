@@ -199,7 +199,6 @@ def get_event_list_for_datatable(sn):
         a = a['log'].split('/')  # For Linux
         i['down'] = '<a class=c_hyper href=/file/event/%s/%s>' \
                     '<img src="../static/img/icon-download.svg" alt="download_menu" /></a>' % (a[-1], i['sn'])
-
     return jsonify(res)
 
 
@@ -223,7 +222,6 @@ def get_event_list_for_datatable2(sn):
         a = a['log'].split('/')  # For Linux
         i['down'] = '<a class=c_hyper href=/file/event/%s/%s>' \
                     '<img src="../static/img/icon-download.svg" alt="download_menu" /></a>' % (a[-1], i['sn'])
-
     return jsonify(res)
 
 
@@ -254,7 +252,6 @@ def get_event_file(filename, sn):
             return send_from_directory(clip_path, cache.hget(sn, 'log_name').decode('utf-8'),
                                        as_attachment=True,
                                        attachment_filename=cache.hget(sn, 'log_name').decode('utf-8'))
-
         time.sleep(1)
         t1 = datetime.now()
         print('Log Waiting', t1.timestamp() - t0.timestamp())

@@ -6,6 +6,9 @@
 .upload/
 .vscode/
 .venv/
-.clips/
+.clips/*.tgz
+.clips/*.mp4
+*.tgz
+*.mp4
 .test/save-videos/
 venv/

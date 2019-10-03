@@ -18,7 +18,7 @@ app = Flask(__name__, template_folder=os.getcwd()+'/templates', static_folder=os
 app.config.update(
     DEBUG=False,
     SCREATE_KEY='secret_xxx',
-    ROBOT_DATA_WAIT_TIMEOUT = 10,
+    ROBOT_DATA_WAIT_TIMEOUT=10,
     REDIS_URL="redis://%s" % REDIS_URL
 )
 app.register_blueprint(sse, url_prefix='/stream')
@@ -61,8 +61,6 @@ def login():
 cache = Redis(host=REDIS_URL, port=6379, db=0)
 cache.flushdb()
 print(cache.keys())
-print(cache.hkeys('D11924I07T02'))
-print(cache.hgetall('D11924I07T02'))
 
 INTERNAL_DATABASE = True
 
