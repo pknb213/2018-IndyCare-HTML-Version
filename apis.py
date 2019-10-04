@@ -260,13 +260,13 @@ def get_event_file(filename, sn):
                                       attachment_filename=cache.hget(sn, 'log_name').decode('utf-8'))
             print("Succ :", res)
             print(cache.hgetall(sn))
-            return Response('ok')
+            return res
 
         time.sleep(1)
         t1 = datetime.now()
         print('Log Waiting', t1.timestamp() - t0.timestamp())
-    load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
-    return Response('Fail')
+    return load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
+
 
 
 @app.route("/report/robot/state/<sn>", methods=["POST"])

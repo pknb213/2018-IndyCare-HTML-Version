@@ -195,7 +195,8 @@ def event_log_uploader(sn):
         # s.post(URL + '/login', {'id': sn, 'pwd': sn})
         try:
             messages = SSEClient(URL + '/stream?channel=%s_event_log' % sn)
-        except SystemExit:
+        except SystemExit as e:
+            print("System Exception : ", e)
             s.close()
             sys.exit()
         try:
