@@ -61,10 +61,8 @@ def login():
 cache = Redis(host=REDIS_URL, port=6379, db=0)
 cache.flushdb()
 print(cache.keys())
-print(cache.hkeys('D11924I07T02'))
-print(cache.hgetall('D11924I07T02'))
 
-INTERNAL_DATABASE = True
+INTERNAL_DATABASE = False
 
 DictCursor = pymysql.cursors.DictCursor
 
@@ -90,7 +88,7 @@ class MySQL:
                                  port=3306,
                                  user='root',
                                  password='nrmk2013',
-                                 db='product',
+                                 db='indycare',
                                  charset='utf8')
         return db
 

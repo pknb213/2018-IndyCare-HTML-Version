@@ -271,7 +271,7 @@
                 <!-- //tab_robot_information -->
 
                 <!-- tab_chart_information -->
-                <div id="Chart_Information" class="tabcontent">
+                {#<div id="Chart_Information" class="tabcontent">
                     <div class="opdata_card"
                          style="display: block; margin-bottom: 50px; height: 400px; background-color: white">
                         <div style="display: inline-block;">
@@ -304,6 +304,42 @@
                         <div style="display: inline-block; float: left;">
                             <h3>Analog I/O</h3>
                             <div style="width: 550px; height: 350px;">
+                                <canvas id="myAnalog_third"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>#}
+                <div id="Chart_Information" class="tabcontent">
+                    <div class="chart_info">
+                        <div class="chart_cnt">
+                            <h3>Work Count[CNT]</h3>
+                            <div class="chart_cnt_canvas">
+                                <canvas id="myCountChart_second"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart_tmp">
+                            <h3>Temperature[TMP]</h3>
+                            <div class="chart_tmp_canvas">
+                                <canvas id="myTempChart_second"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart_info_an">
+                        <div class="chart_an_1">
+                            <h3>Analog I/O</h3>
+                            <div class="chart_an_1_canvas">
+                                <canvas id="myAnalog"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart_an_2">
+                            <h3>Analog I/O</h3>
+                            <div class="chart_an_2_canvas">
+                                <canvas id="myAnalog_second"></canvas>
+                            </div>
+                        </div>
+                        <div class="chart_an_3">
+                            <h3>Analog I/O</h3>
+                            <div class="chart_an_3_canvas">
                                 <canvas id="myAnalog_third"></canvas>
                             </div>
                         </div>

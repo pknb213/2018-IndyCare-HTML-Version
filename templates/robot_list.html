@@ -46,7 +46,7 @@
 
             <nav class="nav_menu">
                 <ul class="sub_menu">
-                    <li class="sub">
+                    <li class="sub" hidden>
                         <a href="#">
                             <img src="../static/img/icon-user.svg" alt="icon_User"/>
                             <span>User</span>
@@ -146,9 +146,11 @@
                         <thead>
                         <tr>
                             <th>SN</th>
+                            <th>Model</th>
                             <th>Site</th>
                             <th>Company</th>
                             <th>KPI</th>
+                            <th>Header</th>
                             <th>Enter</th>
                         </tr>
                         </thead>
@@ -186,9 +188,11 @@
             },
             columns: [
                 {"data": "sn"},
+                {"data": "model"},
                 {"data": "site"},
                 {"data": "company"},
                 {"data": "kpi"},
+                {"data": "header"},
                 {"data": "deploy"}
             ],
             order: [[0, 'desc']]

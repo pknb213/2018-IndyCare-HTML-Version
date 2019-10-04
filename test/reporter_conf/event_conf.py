@@ -36,7 +36,6 @@ class EventFiles:
                 return logs[0]
             time.sleep(check_duration)
             timeout -= check_duration
-        print('no log file...')
         return ''
 
     @classmethod

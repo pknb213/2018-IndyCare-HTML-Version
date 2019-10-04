@@ -232,7 +232,7 @@ def event_log_uploader(sn):
 
 
 def clip_uploader(sn):
-    print("Clip Uploader Start")
+    print("Clip Uploader Start", EventFiles.EVENT_DIRECTORY)
 
     while True:
         s = requests.Session()
@@ -248,10 +248,10 @@ def clip_uploader(sn):
                 if EventFiles.get_latest_clip():
                     with open(EventFiles.get_latest_clip(), 'rb') as f:
                         print(f)
-                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': f}, timeout=15)
+                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': f}, timeout=25)
                 else:
                     print("No Clip")
-                    res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=10)
+                    res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=25)
         except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!", e)

@@ -220,13 +220,26 @@ function temp_cfg(ctx, data) {
 }
 
 function analog_cfg(ctx, data) {
+    let gradientStroke = ctx.createLinearGradient(0,0,0,400);
+    gradientStroke.addColorStop(0, "#047BF8");
+    gradientStroke.addColorStop(1, "#047BF8");
+    let gradientFill = ctx.createLinearGradient(0,0,0,400);
+    //gradientFill.addColorStop(0,"rgba(200,207,259,1)");
+    gradientFill.addColorStop(0,"rgba(210,232,254,1)");
+    gradientFill.addColorStop(1,"rgba(210,232,254,0.0)");
     let dataset = {
             label: 'Analog',
             data: data,
             fill: true,
-            backgroundColor: "rgba(54,162,235,0.2)",
-            borderColor: "rgba(54,162,23)",
-            borderWidth: 1
+            pointBorderColor: gradientStroke,
+            pointBackgroundColor: gradientStroke,
+            pointBorderWidth: 2,
+            pointHoverRadius: 2,
+            pointRadius: 2,
+            backgroundColor: gradientFill,
+            borderWidth: 2.5,
+            borderColor: gradientStroke,
+            hoverBorderColor: "#FACD83"
         };
 
     return cfg = {

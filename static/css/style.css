@@ -834,3 +834,98 @@ hr {
 .list_contents_table table_style tbody tr td :last-of-type {
   border-bottom: 1px solid #e6e8ea;
 }
+
+/* tab chart */
+
+.chart_info {
+  width: 1770px;
+  height: 372px;
+  border-radius: 6px;
+  background-color: #fff;
+}
+
+.chart_info_an {
+  width: 1770px;
+  height: 356px;
+  border-radius: 6px;
+  background-color: #fff;
+  margin-top: 16px;
+}
+
+.chart_info {
+  box-sizing: border-box;
+  padding: 24px 30px;
+}
+
+.chart_info h3 {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 4px;
+}
+.chart_info .chart_cnt {
+  width: 498px;
+  height: 324px;
+  float: left;
+  margin-right: 16px;
+  display: inline-block;
+}
+
+.chart_info .chart_cnt .chart_cnt_canvas canvas {
+  width: 498px;
+  height: 294px;
+}
+
+.chart_info .chart_tmp {
+  width: 1184px;
+  height: 324px;
+  display: inline-block;
+}
+
+.chart_info .chart_tmp .chart_tmp_canvas canvas {
+  width: 1184px;
+  height: 294px;
+}
+
+.chart_info_an {
+  box-sizing: border-box;
+  padding: 24px 30px;
+}
+.chart_info_an .chart_an_1 {
+  display: inline-block;
+  width: 553px;
+  height: 300px;
+  margin-right: 16px;
+}
+
+.chart_info_an .chart_an_1 canvas {
+  width: 553px;
+  height: 278px;
+}
+
+.chart_info_an .chart_an_2 {
+  display: inline-block;
+  width: 553px;
+  height: 300px;
+  margin-right: 16px;
+}
+
+.chart_info_an .chart_an_2 canvas {
+  width: 553px;
+  height: 278px;
+}
+
+.chart_info_an .chart_an_3 {
+  display: inline-block;
+  width: 553px;
+  height: 300px;
+}
+.chart_info_an .chart_an_3 canvas {
+  width: 553px;
+  height: 278px;
+}
+
+.chart_info_an h3 {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 4px;
+}

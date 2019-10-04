@@ -48,7 +48,7 @@ def get_kpi(sn):
 
 @app.route("/robots")
 def robots():
-    sql = "SELECT sn, company, site, kpi0, kpi1, kpi2, kpi3, kpi4 FROM robots"
+    sql = "SELECT sn, company, site, kpi0, kpi1, kpi2, kpi3, kpi4, model, header FROM robots"
     res = MySQL.select(sql)
     print(res)
     for i in res:
@@ -56,7 +56,8 @@ def robots():
             if v is None:
                 i[k] = ''
         i['kpi'] = i['kpi0'] + ', ' + i['kpi1'] + ', ' + i['kpi2'] + ', ' + i['kpi3'] + ', ' + i['kpi4']
-        i['deploy'] = "<a href=/display?sn=%s>Deployment</a>" % i['sn']
+        i['deploy'] = '<a href=/display?sn=%s>' \
+                      '<img src="../static/img/icon_monitoring.svg" alt="download_menu" /></a>' % i['sn']
         del i['kpi0'], i['kpi1'], i['kpi2'], i['kpi3'], i['kpi4'],
     return jsonify(res)
 
@@ -281,9 +282,9 @@ def report_robot_state(sn):
 @app.route("/robot/state/<sn>")
 def robot_state(sn):
     sql = "SELECT state FROM robot_states " \
-          "WHERE serial_number = \"%s\" AND date <= \"%s\" " \
+          "WHERE serial_number = \"%s\" AND date >= \"%s\" AND date < \"%s\" " \
           "ORDER BY date DESC LIMIT 1 " \
-          % (sn, datetime.utcnow().strftime(fmtAll))
+          % (sn, (datetime.utcnow() - timedelta(seconds=30)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
     res = MySQL.select(sql, False)
     print("State Res : ", res)
     if res is False:
