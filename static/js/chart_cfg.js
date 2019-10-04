@@ -226,18 +226,18 @@ function analog_cfg(ctx, data) {
     let gradientFill = ctx.createLinearGradient(0,0,0,400);
     //gradientFill.addColorStop(0,"rgba(200,207,259,1)");
     gradientFill.addColorStop(0,"rgba(210,232,254,1)");
-    gradientFill.addColorStop(1,"rgba(210,232,254,0.0)");
+    gradientFill.addColorStop(1,"rgba(210,232,254,0.6)");
     let dataset = {
             label: 'Analog',
             data: data,
             fill: true,
             pointBorderColor: gradientStroke,
             pointBackgroundColor: gradientStroke,
-            pointBorderWidth: 2,
+            pointBorderWidth: 1.2,
             pointHoverRadius: 2,
-            pointRadius: 2,
+            pointRadius: 1,
             backgroundColor: gradientFill,
-            borderWidth: 2.5,
+            borderWidth: 1.4,
             borderColor: gradientStroke,
             hoverBorderColor: "#FACD83"
         };
@@ -246,10 +246,10 @@ function analog_cfg(ctx, data) {
         type: 'line',
         data: {datasets: [dataset]},
         options: {
-            animation: false,
-            responsive: true,
+            animation: true,
+            responsive: false,
             maintainAspectRatio: false,
-            responsiveAnimationDuration: 0,
+            responsiveAnimationDuration: 150,
             tooltips: {
                 mode: 'index',
                 intersect: false,

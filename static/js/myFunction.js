@@ -158,8 +158,8 @@ function create_mean_chart_for_temp(kpi_num, data) {
 
 function create_mean_chart_for_analog(kpi_num, data) {
     let ctx = document.getElementById('myAnalog').getContext('2d');
-    ctx.canvas.width = 500;
-    ctx.canvas.height = 400;
+    // ctx.canvas.width = 500;
+    // ctx.canvas.height = 400;
     let ctx2 = document.getElementById('myAnalog_second').getContext('2d');
     let ctx3 = document.getElementById('myAnalog_third').getContext('2d');
 
@@ -179,8 +179,8 @@ function refresh_count_chart(kpi_num, data) {
     ctx.canvas.height = 300;
 
     let ctx2 = document.getElementById("myCountChart_second").getContext('2d');
-    ctx2.canvas.width = 600;
-    ctx2.canvas.height = 350;
+    // ctx2.canvas.width = 600;
+    // ctx2.canvas.height = 350;
 
     let cfg = count_cfg(ctx, data);
 
@@ -195,8 +195,8 @@ function refresh_temp_chart(kpi_num, data) {
     ctx.canvas.width = 1200;
     ctx.canvas.height = 300;
     let ctx2 = document.getElementById("myTempChart_second").getContext('2d');
-    ctx2.canvas.width = 1050;
-    ctx2.canvas.height = 350;
+    // ctx2.canvas.width = 1050;
+    // ctx2.canvas.height = 350;
 
     let cfg = temp_cfg(ctx, data);
 
@@ -208,8 +208,8 @@ function refresh_temp_chart(kpi_num, data) {
 
 function refresh_anlog_chart(kpi_num, data) {
     let ctx = document.getElementById('myAnalog').getContext('2d');
-    ctx.canvas.width = 500;
-    ctx.canvas.height = 400;
+    ctx.canvas.width = 553;
+    ctx.canvas.height = 278;
     let ctx2 = document.getElementById('myAnalog_second').getContext('2d');
     let ctx3 = document.getElementById('myAnalog_third').getContext('2d');
 
