@@ -9,3 +9,5 @@
 .clips/
 .test/save-videos/
 venv/
+*.mp4
+*.tgz
