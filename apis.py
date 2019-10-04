@@ -8,10 +8,10 @@ from utils import *
 #     cache.hset(sn, 'clip', 0 if cam else -1)  # cam 값이 있으면 0, 없으면 -1
 
 
-@app.route("/ping")
+@app.route("/ping", methods=["POST"])
 def ping():
     print("Pong")
-    return 1
+    return Response(status=200)
 
 
 @app.route("/date/now")
@@ -232,33 +232,41 @@ def get_event_file(filename, sn):
     # todo : 버튼 클릭했을 때, 불려지는 API로 그리고 나서 SSE로 reporter에게 파일 달라고 함
     print("File : ", request.files)
     clip_path = os.path.join(os.getcwd(), 'clips')
-    if request.files:
-        file_name = request.files['file'].filename
-        request.files['file'].save(os.path.join(clip_path, file_name))
-        cache.hset(sn, 'event_log', 1)
-        cache.hset(sn, 'log_name', file_name)
-    else:
+    if request.method == "GET":
         cache.hset(sn, 'event_log', 0)
         print("Log를 요청하겠사와요")
         load_sse_command(sn, '_event_log', {'sn': sn, 'filename': filename})
+    elif request.method == "POST":
+        if request.files:
+            file_name = request.files['file'].filename
+            request.files['file'].save(os.path.join(clip_path, file_name))
+            cache.hset(sn, 'event_log', 1)
+            cache.hset(sn, 'log_name', file_name)
+            return Response('ok')
+        else:
+            return Response("Empty the File", status=404)
+    else:
+        return Response("Undefined Http Method Type")
 
     t1 = t0 = datetime.now()
     while t1.timestamp() - t0.timestamp() <= app.config['ROBOT_DATA_WAIT_TIMEOUT']:
         st = int(cache.hget(sn, 'event_log'))
         if st < 0:
             print("Fail")
-            return Response("No Log")
+            return Response("No Log", status=404)
         if st > 0:
-            print("Succ")
+            res = send_from_directory(clip_path, cache.hget(sn, 'log_name').decode('utf-8'),
+                                      as_attachment=True,
+                                      attachment_filename=cache.hget(sn, 'log_name').decode('utf-8'))
+            print("Succ :", res)
             print(cache.hgetall(sn))
-            return send_from_directory(clip_path, cache.hget(sn, 'log_name').decode('utf-8'),
-                                       as_attachment=True,
-                                       attachment_filename=cache.hget(sn, 'log_name').decode('utf-8'))
+            return Response('ok')
 
         time.sleep(1)
         t1 = datetime.now()
         print('Log Waiting', t1.timestamp() - t0.timestamp())
-    return load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
+    load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
+    return Response('Fail')
 
 
 @app.route("/report/robot/state/<sn>", methods=["POST"])

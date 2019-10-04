@@ -41,7 +41,7 @@ def test_process(sn='D1234'):
                     if res.status_code == 200:
                         break
                 except requests.exceptions.RequestException:
-                    pass
+                    time.sleep(5)
                 if t1.timestamp() - t0.timestamp() > 60:
                     print("<P4> Session ReConnected")
                     s.close()
@@ -111,10 +111,9 @@ def reporter(q, sn , shm):
         else:
             break
 
+    s = requests.Session()
     while True:
-        s = requests.Session()
         #s.post(URL + '/login', {'id': sn, 'pwd': sn})
-
         t0 = datetime.datetime.now()
         # todo : About CONTY Alert
         reporter_shm.turn_on_reporter(reporter_shm)
@@ -150,7 +149,6 @@ def reporter(q, sn , shm):
             state_idc.update(reporter_shm.get_all_reporter_state(reporter_shm))
             # state_idc.update(sys_shm.get_all_sys_state(sys_shm))
             s.post(URL + '/report/robot/state/' + sn, json=state_idc, timeout=10)
-            # s.post(URL + '/report_robot_status', json=json.dumps(state_idc), timeout=10)
 
             print("\nReporter : ", t0, shm.get_all_reporter_state(shm))
             print(state_idc, "\n")
@@ -161,23 +159,27 @@ def reporter(q, sn , shm):
                 date = str(datetime.datetime.strptime(log_file[12:-4], '%m-%d-%Y-%H-%M-%S'))
                 code = int(log_file[:2])
                 print(date)
-                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log}, timeout=20)
+                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log}, timeout=30)
                 time.sleep(4)
-            s.close()
             time.sleep(2)
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
-            print("Connect Error !!")
+            print("Connect Error !!", e)
             while True:
-                print("<Reporter> Reconnected . . . ", t1.timestamp() - t0.timestamp())
+                print("<Reporter> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
                     res = s.post(URL + '/ping', timeout=5)
+                    print("Ping res :", res)
                     if res.status_code == 200:
-                            break
-                except requests.exceptions.RequestException:
-                    pass
+                        print("<Reporter> Reconnected !!")
+                        break
+                except requests.exceptions.ConnectionError:
+                    time.sleep(5)
+                except Exception as e:
+                    print(e)
+                    time.sleep(2)
                 if t1.timestamp() - t0.timestamp() > 60:
-                    print("<Reporter> Session ReConnected")
+                    print("<Reporter> Session Time Over")
                     s.close()
                     time.sleep(1)
                     s = requests.Session()
@@ -204,22 +206,23 @@ def event_log_uploader(sn):
                     with open(EventFiles.get_directory_path() + data['filename'], 'rb') as f:
                         print(f)
                         res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f}, timeout=15)
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
-            print("Connect Error !!")
+            print("Connect Error !!", e)
             while True:
-                print("<Events> Reconnected . . . ", t1.timestamp() - t0.timestamp())
+                print("<Events> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
                     if EventFiles.get_directory_path():
                         with open(EventFiles.get_directory_path() + data['filename'], 'rb') as f:
                             print(f)
                             res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f}, timeout=5)
                         if res.status_code == 200:
-                                break
-                except requests.exceptions.RequestException:
-                    pass
+                            print("<Events> Reconnected !!")
+                            break
+                except requests.exceptions.ConnectionError:
+                    time.sleep(5)
                 if t1.timestamp() - t0.timestamp() > 60:
-                    print("<Events> Session ReConnected")
+                    print("<Events> Session Time Over")
                     s.close()
                     time.sleep(1)
                     s = requests.Session()
@@ -248,23 +251,24 @@ def clip_uploader(sn):
                 else:
                     print("No Clip")
                     res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=10)
-        except requests.exceptions.ConnectionError:
+        except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
-            print("Connect Error !!")
+            print("Connect Error !!", e)
             while True:
-                print("<Clip> Reconnected . . . ", t1.timestamp() - t0.timestamp())
+                print("<Clip> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
                     if EventFiles.get_latest_clip():
                         with open(EventFiles.get_latest_clip(), 'rb') as f:
                             res = s.post(URL + '/clip/' + sn + '/check', files={'file': f})
                     else:
                         res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=10)
-                    if res.status_code == 200:
+                    if res.status_code == 200 or res == 'ok':
+                        print("<Clip> Reconnected !!")
                         break
-                except requests.exceptions.RequestException:
-                    pass
+                except requests.exceptions.ConnectionError:
+                    time.sleep(5)
                 if t1.timestamp() - t0.timestamp() > 60:
-                    print("<Clip> Session ReConnected")
+                    print("<Clip> Session Time Out")
                     s.close()
                     time.sleep(1)
                     s = requests.Session()
