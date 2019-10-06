@@ -14,6 +14,16 @@ fmt = '%Y-%m-%d'
 
 # REDIS_URL = '13.209.42.91'
 REDIS_URL = 'localhost'
+
+cache = Redis(host=REDIS_URL, port=6379, db=0)
+# cache = Redis(host=REDIS_URL, port=6378, db=0)
+cache.flushdb()
+print(cache.keys())
+
+INTERNAL_DATABASE = True
+
+DictCursor = pymysql.cursors.DictCursor
+
 app = Flask(__name__, template_folder=os.getcwd()+'/templates', static_folder=os.getcwd()+'/static')
 app.config.update(
     DEBUG=False,
@@ -56,15 +66,6 @@ def login():
     user = Robot(request.form['id'])
     login_user(user)
     return 'LOGIN'
-
-
-cache = Redis(host=REDIS_URL, port=6379, db=0)
-cache.flushdb()
-print(cache.keys())
-
-INTERNAL_DATABASE = False
-
-DictCursor = pymysql.cursors.DictCursor
 
 
 def load_sse_command(sn, tag, __dict=None):

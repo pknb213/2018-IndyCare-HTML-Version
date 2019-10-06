@@ -1,7 +1,7 @@
-var vid = document.getElementById("dashcam");
+let vid = document.getElementById("dashcam");
 
 function myFunction() {
-  var text1 = vid.addTextTrack("caption");
+  let text1 = vid.addTextTrack("caption");
   text1.addCue(new TextTrackCue("Test text", 1.000, 4.000, "", "", "", true));
 }
 
@@ -29,16 +29,16 @@ function load_clip(sn) {
             } else {
                 $("#clip_msg").append("<p> Please, Refresh</p>");
                 video.style.display = 'block';
-                msg.style.display = 'block';
-                video.setAttribute('poster', '"/clip/poster/error"');
+                msg.style.display = 'none';
+                video.setAttribute('poster', '/clip/poster/error');
                 console.log("Clip : else");
             }
         },
         error: (request, status, error) => {
             let video = document.getElementById("black_box_clip");
             let msg = document.getElementById("black_box_message");
-            video.style.display = 'hidden';
-            msg.style.display = 'block';
+            video.style.display = 'block';
+            msg.style.display = 'none';
             $('#clip_msg').append("<p>" + status + "</p>");
             console.log("Load Black Box Fail " + request + status + error);
         }

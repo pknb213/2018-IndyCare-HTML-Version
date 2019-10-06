@@ -35,7 +35,7 @@ def get_kpi(sn):
     res = MySQL.select(sql, multi=False)
     print("KPI Res : ", res)
     lis = []
-    if res is not None:
+    if res is not None and res is not False:
         for k, v in res.items():
             if v is not None:
                 v = v.split(',')
@@ -51,14 +51,24 @@ def robots():
     sql = "SELECT sn, company, site, kpi0, kpi1, kpi2, kpi3, kpi4, model, header FROM robots"
     res = MySQL.select(sql)
     print(res)
-    for i in res:
-        for k, v in i.items():
-            if v is None:
-                i[k] = ''
-        i['kpi'] = i['kpi0'] + ', ' + i['kpi1'] + ', ' + i['kpi2'] + ', ' + i['kpi3'] + ', ' + i['kpi4']
-        i['deploy'] = '<a href=/display?sn=%s>' \
-                      '<img src="../static/img/icon_monitoring.svg" alt="download_menu" /></a>' % i['sn']
-        del i['kpi0'], i['kpi1'], i['kpi2'], i['kpi3'], i['kpi4'],
+    if res is not None and res is not False:
+        for i in res:
+            for k, v in i.items():
+                if v is None:
+                    i[k] = ''
+            # print("Rstate : ", cache.hget(i['sn'], 'state'))
+            if not cache.hget(i['sn'], 'state'): i['state'] = "<img src='../static/img/add.png' alt='btn_image' />"
+            else:
+                state = dict(cache.hget(i['sn'], 'state').decode())
+                if state['error'] > 0:
+                    pass # todo : 여기다가 error 상태에 따른 이미지 넣어야함.
+                else:
+                    i['state'] = "<img src='../static/img/pen.png' alt='btn_image' />"
+            i['kpi'] = i['kpi0'] + ', ' + i['kpi1'] + ', ' + i['kpi2'] + ', ' + i['kpi3'] + ', ' + i['kpi4']
+            i['deploy'] = '<a href=/display?sn=%s>' \
+                          '<img src="../static/img/icon_monitoring.svg" alt="download_menu" /></a>' % i['sn']
+            del i['kpi0'], i['kpi1'], i['kpi2'], i['kpi3'], i['kpi4']
+
     return jsonify(res)
 
 
@@ -80,11 +90,12 @@ def clip_check(sn):
             except Exception as e:
                 print("다른 프로세스가 파일을 사용 중입니다.")
 
-    print("File : ", request.files)
     if request.files:
+        print("File : ", request.files)
         if request.files['file'].name == 'No Camera':
             cache.hset(sn, 'clip', -1)
-            return Response("Fail", status=404)
+            # return Response("Fail", status=404)
+            return 'Fail'
     else:
         if not cache.exists('clipname', 'clip'):
             cache.hset(sn, 'clipname', 'No Clip')
@@ -92,7 +103,7 @@ def clip_check(sn):
             time.sleep(0.02)  # for scheduling
             cache.hset(sn, 'clip', -1)
             print("hset : ", sn, 'clip', -1)
-            return 'ok'
+            return 'Fail'
 
     file_name = request.files['file'].filename
     clip_path = os.path.join(os.getcwd(), 'clips', request.files['file'].filename)
@@ -110,6 +121,7 @@ def clip_check(sn):
     time.sleep(10)
 
     clip = cache.hget(sn, 'clip')
+    if clip is None: clip = 0
     if float(clip) < 0:
         cache.hset(sn, 'clip', 0)
         print("No Camera : sn (clip) set 0")
@@ -269,7 +281,7 @@ def get_event_file(filename, sn):
     return load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
 
 
-
+# Todo : Reporter Server API
 @app.route("/report/robot/state/<sn>", methods=["POST"])
 def report_robot_state(sn):
     print("Reporter State :", request.json)
@@ -286,11 +298,14 @@ def robot_state(sn):
           "ORDER BY date DESC LIMIT 1 " \
           % (sn, (datetime.utcnow() - timedelta(seconds=30)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
     res = MySQL.select(sql, False)
-    print("State Res : ", res)
+    print("State Loop Res : ", res)
     if res is False:
         dic = str({'busy': 0, 'collision': 0, 'emergency': 0, 'error': 0, 'home': 0,
                    'finish': 0, 'ready': 0, 'resetting': 0, 'zero': 0, 'is_server_connected': 1})
+        cache.hset(sn, 'state', dic)
         return jsonify(dic)
+
+    cache.hset(sn, 'state', res['state'])
     return jsonify(res['state'])
 
 
@@ -298,7 +313,7 @@ def robot_state(sn):
 @app.route("/opdata/<sn>", methods=["POST"])
 def opdate(sn, axis=1, key='', period=''):
     if request.method == 'GET':
-        print("Opdata SN : %s, Axis : %s, Key : %s, Time : %s" % (sn, axis, key, datetime.now().strftime(fmtAll)))
+        print("Opdata Loop SN : %s, Axis : %s, Key : %s, Time : %s" % (sn, axis, key, datetime.now().strftime(fmtAll)))
         if key == 'count':
             sql = "SELECT DATE_FORMAT(CONVERT_TZ(MAX(x), '+00:00', '+09:00'), '%%m-%%d %%H:%%i') m, " \
                   "COUNT(y) from opdatas " \
@@ -340,7 +355,7 @@ def opdate(sn, axis=1, key='', period=''):
             ez = []
             fz = []
 
-            if res is None or res is False: return jsonify(res)
+            if res is None or type(res) is bool: return jsonify(res)
             for i in res:
                 a = {'x': i['m'], 'y': i['ROUND(AVG(joint0), 2)']}
                 b = {'x': i['m'], 'y': i['ROUND(AVG(joint1), 2)']}

@@ -64,8 +64,8 @@ function count_cfg(ctx, data) {
                 }],
                 yAxes: [{
                     scaleLabel: {
-                        display: true,
-                        labelString: 'Work Count'
+                        //display: true,
+                        //labelString: 'Work Count'
                     },
                     ticks: {
                         fontColor: "rgba(0,0,0,0.8)",
@@ -278,8 +278,8 @@ function analog_cfg(ctx, data) {
                 }],
                 yAxes: [{
                     scaleLabel: {
-                        display: true,
-                        labelString: 'Analog'
+                        // display: true,
+                        // labelString: 'Analog'
                     },
                     ticks: {
                         beginAtZero: true,

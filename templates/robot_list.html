@@ -63,7 +63,7 @@
                     <li class="sub">
                         <a href="#">
                             <img src="../static/img/icon-company.svg" alt="icon_Company"/>
-                            <span>Company</span>
+                            <span>Robots</span>
                         </a>
                         <ul hidden>
                             <li>
@@ -151,6 +151,7 @@
                             <th>Company</th>
                             <th>KPI</th>
                             <th>Header</th>
+                            <th>State</th>
                             <th>Enter</th>
                         </tr>
                         </thead>
@@ -175,11 +176,11 @@
             lengthChange: false,
             bInfo: false,
             columnDefs: [
-                {'width': "15%", "targets": 0},
+               {# {'width': "15%", "targets": 0},
                 {'width': "20%", "targets": 0},
                 {'width': "20%", "targets": 0},
                 {'width': "30%", "targets": 0},
-                {'width': "15%", "targets": 0}
+                {'width': "15%", "targets": 0}#}
             ],
             ajax: {
                 "url": "/robots",
@@ -193,11 +194,20 @@
                 {"data": "company"},
                 {"data": "kpi"},
                 {"data": "header"},
+                {"data": "state"},
                 {"data": "deploy"}
             ],
             order: [[0, 'desc']]
         });
+
+        {#setInterval(()=>{
+            check_robot_state();
+        }, 30000)#}
     });
+
+    function check_robot_state(){
+
+    }
 </script>
 <script src="../static/js/libs/datatables.js"></script>
 </body>
