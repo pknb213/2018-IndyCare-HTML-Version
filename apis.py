@@ -93,20 +93,21 @@ def clip_check(sn):
             except Exception as e:
                 print("다른 프로세스가 파일을 사용 중입니다.")
 
-    if request.files:
-        print("File : ", request.files)
-        if request.files['file'].name == 'No Camera':
-            cache.hset(sn, 'clip', -1)
-            # return Response("Fail", status=404)
-            return 'Fail'
-    else:
-        if not cache.exists('clipname', 'clip'):
-            cache.hset(sn, 'clipname', 'No Clip')
-            print("hset : ", sn, 'clipname', 'No Clip')
-            time.sleep(0.02)  # for scheduling
-            cache.hset(sn, 'clip', -1)
-            print("hset : ", sn, 'clip', -1)
-            return 'Fail'
+    if request.method == "POST":
+        if request.files:
+            print("File : ", request.files)
+            if request.files['file'].name == 'No Camera':
+                cache.hset(sn, 'clip', -1)
+                # return Response("Fail", status=404)
+                return 'Fail'
+        else:
+            if not cache.exists('clipname', 'clip'):
+                cache.hset(sn, 'clipname', 'No Clip')
+                print("hset : ", sn, 'clipname', 'No Clip')
+                time.sleep(0.02)  # for scheduling
+                cache.hset(sn, 'clip', -1)
+                print("hset : ", sn, 'clip', -1)
+                return 'Fail'
 
     file_name = request.files['file'].filename
     clip_path = os.path.join(os.getcwd(), 'clips', request.files['file'].filename)
