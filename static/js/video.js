@@ -35,12 +35,14 @@ function load_clip(sn) {
             }
         },
         error: (request, status, error) => {
-            let video = document.getElementById("black_box_clip");
-            let msg = document.getElementById("black_box_message");
+            let video = document.getElementById("clip");
+            let msg = document.getElementById("clip_msg");
             video.style.display = 'block';
             msg.style.display = 'none';
+            video.setAttribute('poster', '/clip/poster/error');
             $('#clip_msg').append("<p>" + status + "</p>");
-            console.log("Load Black Box Fail " + request + status + error);
+            console.log("Load Black Box Fail : "+  status + " " + error);
+            console.log(request);
         }
     });
 }
