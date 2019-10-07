@@ -199,7 +199,7 @@ def add_event(sn):
 def get_event_list_for_datatable(sn):
     # todo : DataTable에 출력할 용도인 API
     sql = "SELECT idx, json, file, sn, " \
-          "DATE_FORMAT(CONVERT_TZ(occurrence_time, '+00:00', '+09:00'), '%%Y-%%m-%%d %%H:%%i') " \
+          "DATE_FORMAT(CONVERT_TZ(occurrence_time, '+00:00', '+09:00'), '%%Y-%%m-%%d %%H:%%i:%%s') " \
           "as occurrence_time " \
           "FROM events " \
           "WHERE sn=\"%s\" ORDER BY occurrence_time DESC LIMIT 5 " % sn
@@ -223,7 +223,7 @@ def get_event_list_for_datatable(sn):
 def get_event_list_for_datatable2(sn):
     # todo : DataTable에 출력할 용도인 API
     sql = "SELECT idx, json, file, sn, " \
-          "DATE_FORMAT(CONVERT_TZ(occurrence_time, '+00:00', '+09:00'), '%%Y-%%m-%%d %%H:%%i') " \
+          "DATE_FORMAT(CONVERT_TZ(occurrence_time, '+00:00', '+09:00'), '%%Y-%%m-%%d %%H:%%i:%%s') " \
           "as occurrence_time " \
           "FROM events " \
           "WHERE sn=\"%s\" ORDER BY occurrence_time DESC " % sn

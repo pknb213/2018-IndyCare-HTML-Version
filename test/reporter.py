@@ -37,7 +37,7 @@ def test_process(sn='D1234'):
             while True:
                 print("Reconnected . . . ", t1.timestamp() - t0.timestamp())
                 try:
-                    res = s.post(URL + '/opdata', json={"x": str(datetime.datetime.now()), "y": 777}, timeout=3)
+                    res = s.post(URL + '/opdata', json={"x": str(datetime.datetime.now()), "y": 777}, timeout=15)
                     if res.status_code == 200:
                         break
                 except requests.exceptions.RequestException:
@@ -167,7 +167,7 @@ def reporter(q, sn , shm):
             while True:
                 print("<Reporter> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
-                    res = s.post(URL + '/ping', timeout=10)
+                    res = s.post(URL + '/ping', timeout=15)
                     print("Ping res :", res)
                     if res.status_code == 200:
                         print("<Reporter> Reconnected !!")

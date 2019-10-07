@@ -28,7 +28,7 @@ app = Flask(__name__, template_folder=os.getcwd()+'/templates', static_folder=os
 app.config.update(
     DEBUG=False,
     SCREATE_KEY='secret_xxx',
-    ROBOT_DATA_WAIT_TIMEOUT=20,
+    ROBOT_DATA_WAIT_TIMEOUT=30,
     REDIS_URL="redis://%s" % REDIS_URL
 )
 app.register_blueprint(sse, url_prefix='/stream')

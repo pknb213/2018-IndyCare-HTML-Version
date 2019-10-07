@@ -153,7 +153,7 @@ function create_mean_chart_for_temp(kpi_num, data) {
     ctx.canvas.width = 1200;
     ctx.canvas.height = 300;
     let ctx2 = document.getElementById("myTempChart_second").getContext('2d');
-    ctx2.canvas.width = 1050;
+    ctx2.canvas.width = 1200;
     ctx2.canvas.height = 350;
 
     let cfg = temp_cfg(ctx, data);
