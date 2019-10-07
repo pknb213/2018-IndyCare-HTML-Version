@@ -126,17 +126,17 @@ def reporter(q, sn , shm):
                 if mtype == 1:
                     print("Received Count( %s %s )" % (mtype, msg))
                     dic = {'mtype': mtype, 'msg': msg, 'mdata': mdata}
-                    s.post(URL + '/opdata/' + sn, json=dic, timeout=10)
+                    s.post(URL + '/opdata/' + sn, json=dic)
                     # POST(s, '/report_robot_opdata/' + sn, json=json.dumps({msg: 1.0}))
                 elif mtype == 2:
                     print("Received Mean( %d %s %s )" % (mtype, msg, mdata))
                     dic = {'mtype': mtype, 'msg': msg, 'mdata': mdata}
-                    s.post(URL + '/opdata/' + sn, json=dic, timeout=10)
+                    s.post(URL + '/opdata/' + sn, json=dic)
                     # POST(s, '/report_robot_opdata/' + sn, json=json.dumps(_dic))
                 elif mtype == 100:
                     print("KPI configuration( %s, %s )" % (msg, mdata))
                     dic = {'mtype': mtype, 'msg': msg, 'mdata': mdata}
-                    s.post(URL + "/reporter/kpi/" + sn, json=dic, timeout=10)
+                    s.post(URL + "/reporter/kpi/" + sn, json=dic)
                     # POST(s, '/report_kpi_string/' + sn, json=json.dumps({msg: mdata}))
                 else:
                     pass
@@ -148,7 +148,7 @@ def reporter(q, sn , shm):
             # state_idc.update(info_shm.get_all_robot_info_data(info_shm))
             state_idc.update(reporter_shm.get_all_reporter_state(reporter_shm))
             # state_idc.update(sys_shm.get_all_sys_state(sys_shm))
-            s.post(URL + '/report/robot/state/' + sn, json=state_idc, timeout=10)
+            s.post(URL + '/report/robot/state/' + sn, json=state_idc)
 
             print("\nReporter : ", t0, shm.get_all_reporter_state(shm))
             print(state_idc, "\n")
@@ -159,8 +159,7 @@ def reporter(q, sn , shm):
                 date = str(datetime.datetime.strptime(log_file[12:-4], '%m-%d-%Y-%H-%M-%S'))
                 code = int(log_file[:2])
                 print(date)
-                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log}, timeout=30)
-                time.sleep(4)
+                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log})
             time.sleep(2)
         except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
@@ -168,7 +167,7 @@ def reporter(q, sn , shm):
             while True:
                 print("<Reporter> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
-                    res = s.post(URL + '/ping', timeout=5)
+                    res = s.post(URL + '/ping', timeout=10)
                     print("Ping res :", res)
                     if res.status_code == 200:
                         print("<Reporter> Reconnected !!")

@@ -188,10 +188,10 @@ def error_clip_poster():
 def add_event(sn):
     # todo : DB에 저장 ( 테이블 만들기 위한 용도 ), 여기서 Javascript에게 SSE로 테이블 로딩 할 수 있음
     print("Insert Mysql : ", request.json)
+    load_sse_command(sn, '_event')
     sql = "INSERT INTO events(json, sn) " \
           "VALUES(\"%s\", \"%s\")" % (str(request.json), sn)
     MySQL.insert(sql)
-    load_sse_command(sn, '_event')
     return Response('ok')
 
 

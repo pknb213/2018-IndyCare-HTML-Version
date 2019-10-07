@@ -42,7 +42,7 @@ function load_clip(sn) {
             video.setAttribute('poster', '/clip/poster/error');
             $('#clip_msg').append("<p>" + status + "</p>");
             console.log("Load Black Box Fail : "+  status + " " + error);
-            console.log(request);
+            //console.log(request);
         }
     });
 }
