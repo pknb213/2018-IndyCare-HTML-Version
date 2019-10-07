@@ -36,8 +36,10 @@ function data_table_for_history(sn) {
         paging: false,
         lengthChange: false,
         bInfo: false,
+        relative: false,
         scrollY: 800,
-        scrollX: false,
+        scrollX: '520px',
+        scrollXInner: '540px',
         ajax: {
             "url": "/list/events2/" + sn,
             "type": "GET",

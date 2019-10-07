@@ -205,7 +205,7 @@ def event_log_uploader(sn):
                 if EventFiles.get_directory_path():
                     with open(EventFiles.get_directory_path() + data['filename'], 'rb') as f:
                         print(f)
-                        res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f}, timeout=15)
+                        res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f})
         except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!", e)
@@ -215,7 +215,7 @@ def event_log_uploader(sn):
                     if EventFiles.get_directory_path():
                         with open(EventFiles.get_directory_path() + data['filename'], 'rb') as f:
                             print(f)
-                            res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f}, timeout=15)
+                            res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f})
                         if res.status_code == 200:
                             print("<Events> Reconnected !!")
                             break
@@ -247,10 +247,10 @@ def clip_uploader(sn):
                 if EventFiles.get_latest_clip():
                     with open(EventFiles.get_latest_clip(), 'rb') as f:
                         print(f)
-                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': f}, timeout=25)
+                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': f})
                 else:
                     print("No Clip")
-                    res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=25)
+                    res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')})
         except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!", e)
@@ -261,7 +261,7 @@ def clip_uploader(sn):
                         with open(EventFiles.get_latest_clip(), 'rb') as f:
                             res = s.post(URL + '/clip/' + sn + '/check', files={'file': f})
                     else:
-                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')}, timeout=20)
+                        res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')})
                     if res.status_code == 200 or res == 'ok':
                         print("<Clip> Reconnected !!")
                         break
