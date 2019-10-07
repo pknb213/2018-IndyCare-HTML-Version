@@ -31,12 +31,13 @@ function get_kpi(sn) {
 function data_table_for_history(sn) {
     // $.fn.dataTable.ext.errMode = 'none';
     $('#dataTable_history').DataTable({
-        width: "650px",
         processing: true,
         searching: false,
         paging: false,
         lengthChange: false,
         bInfo: false,
+        scrollY: 800,
+        scrollX: false,
         ajax: {
             "url": "/list/events2/" + sn,
             "type": "GET",
@@ -72,7 +73,10 @@ function data_table(sn) {
             {"data": "code"},
             {"data": "down"}
         ],
-        order: [[0, 'desc']]
+        order: [[0, 'desc']],
+        language: {
+            "emptyTable": "저장된 이벤트 데이터가 없습니다."
+        }
     });
 }
 

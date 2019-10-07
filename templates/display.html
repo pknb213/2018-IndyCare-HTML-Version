@@ -37,7 +37,7 @@
                     <span>admin</span>
                 </div>
                 <div class="profile_menu">
-                    <a href="javascript:history.back()">
+                    <a href="/">
                         <img src="../static/img/icon-dropdown-menu.svg" alt="dropdown_menu"/>
                     </a>
                 </div>
@@ -46,30 +46,30 @@
             <nav class="nav_menu">
                 <ul class="sub_menu">
                     <li class="sub" hidden>
-                        <a href="javascript:history.back()">
+                        <a href="/">
                             <img src="../static/img/icon-user.svg" alt="icon_User"/>
                             <span>User</span>
                         </a>
                         <ul>
                             <li>
-                                <a href="javascript:history.back()">User<br/>List</a>
+                                <a href="/">User<br/>List</a>
                             </li>
                             <li>
-                                <a href="javascript:history.back()">User<br/>Register</a>
+                                <a href="/">User<br/>Register</a>
                             </li>
                         </ul>
                     </li>
                     <li class="sub">
-                        <a href="javascript:history.back()">
+                        <a href="/">
                             <img src="../static/img/icon-company.svg" alt="icon_Company"/>
                             <span>Robots</span>
                         </a>
                         <ul hidden>
                             <li>
-                                <a href="javascript:history.back()">Company<br/>List</a>
+                                <a href="/">Company<br/>List</a>
                             </li>
                             <li>
-                                <a href="javascript:history.back()">Company<br/>Register</a>
+                                <a href="/">Company<br/>Register</a>
                             </li>
                         </ul>
                     </li>
@@ -127,12 +127,9 @@
                     <h1>ROBOT DETAIL</h1>
                     <div class="breadcrumb">
                         <ul>
-                            <li><a href="javascript:history.back()">HOME</a></li>
-                            <li><a href="javascript:history.back()">COMPANY</a></li>
-                            <li><a href="javascript:history.back()">COMPANY List</a></li>
-                            <li><a href="javascript:history.back()">SITE LIST</a></li>
-                            <li><a href="javascript:history.back()">ROBOT LIST</a></li>
-                            <li class="on"><a href="javascript:history.back()">ROBOT DETAIL</a></li>
+                            <li><a href="/">HOME</a></li>
+                            <li><a href="/">ROBOT LIST</a></li>
+                            <li class="on"><a href="/">ROBOT DETAIL</a></li>
                         </ul>
                     </div>
                 </div>
@@ -219,7 +216,7 @@
                                         <div class="modal-content">
                                             <span class="close">&times;</span>
                                             <div class="history_table">
-                                                <h2>event_history</h2>
+                                                <h2>All Event History</h2>
                                                 <!-- Data Table For Modal -->
                                                 <table id="dataTable_history" class="">
                                                     <thead>
@@ -394,6 +391,8 @@
             update_robot_state(sn);     // 로봇 상태 업데이트
         }, 10000);
     });
+
+    // "javascript:history.back()"
 
 </script>
 </body>

@@ -4,8 +4,8 @@ function count_cfg(ctx, data) {
     gradientStroke.addColorStop(1, "#439CFA");
     let gradientFill = ctx.createLinearGradient(0,0,0,400);
     //gradientFill.addColorStop(0,"rgba(200,207,259,1)");
-    gradientFill.addColorStop(0,"rgba(144,175,249,1)");
-    gradientFill.addColorStop(1,"rgba(232,244,255,0.6");
+    gradientFill.addColorStop(0,"rgba(173,215,255,1)");
+    gradientFill.addColorStop(1,"rgba(173,215,255,0.4");
 
     let dataset = {
         label: 'Count',
@@ -106,7 +106,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(255,99,132)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             },
             {
                 label: 'Joint 1',
@@ -116,7 +116,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(255,205,86)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             },
             {
                 label: 'Joint 2',
@@ -126,7 +126,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(75,192,192)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             },
             {
                 label: 'Joint 3',
@@ -136,7 +136,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(255,159,64)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             },
             {
                 label: 'Joint 4',
@@ -146,7 +146,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(54,162,23)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             },
             {
                 label: 'Joint 5',
@@ -156,7 +156,7 @@ function temp_cfg(ctx, data) {
                 borderColor: "rgba(255,99,132)",
                 borderWidth: 1,
                 lineTension: 0.2,
-                pointRadius: 1
+                pointRadius: 1.5
             }
         ];
     return cfg = {
@@ -221,19 +221,19 @@ function temp_cfg(ctx, data) {
 
 function analog_cfg(ctx, data) {
     let gradientStroke = ctx.createLinearGradient(0,0,0,400);
-    gradientStroke.addColorStop(0, "#047BF8");
-    gradientStroke.addColorStop(1, "#047BF8");
+    gradientStroke.addColorStop(0, "#98d2ff");
+    gradientStroke.addColorStop(1, "#98d2ff");
     let gradientFill = ctx.createLinearGradient(0,0,0,400);
     //gradientFill.addColorStop(0,"rgba(200,207,259,1)");
-    gradientFill.addColorStop(0,"rgba(210,232,254,1)");
-    gradientFill.addColorStop(1,"rgba(210,232,254,0.6)");
+    gradientFill.addColorStop(0,"rgba(214,235,255,0.6)");
+    gradientFill.addColorStop(1,"rgba(214,235,255,0.2)");
     let dataset = {
             label: 'Analog',
             data: data,
             fill: true,
             pointBorderColor: gradientStroke,
             pointBackgroundColor: gradientStroke,
-            pointBorderWidth: 1.2,
+            pointBorderWidth: 0.3,
             pointHoverRadius: 2,
             pointRadius: 1,
             backgroundColor: gradientFill,
@@ -246,6 +246,9 @@ function analog_cfg(ctx, data) {
         type: 'line',
         data: {datasets: [dataset]},
         options: {
+            legend: {
+                position: "bottom"
+            },
             animation: true,
             responsive: false,
             maintainAspectRatio: false,

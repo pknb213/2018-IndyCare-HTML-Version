@@ -431,7 +431,7 @@ hr {
 .chart_info h3 {
   font-size: 16px;
   line-height: 24px;
-  margin-bottom: 4px;
+  margin-bottom: 15px;
 }
 .chart_info .chart_cnt {
   width: 498px;
@@ -502,7 +502,7 @@ hr {
 .chart_info_an h3 {
   font-size: 16px;
   line-height: 24px;
-  margin-bottom: 4px;
+  margin-bottom: 15px;
 }
 
 
@@ -661,7 +661,7 @@ hr {
 }
 
 .event_history .section_title {
-  padding: 24px 0 15px;
+  padding: 24px 0 0px;
 }
 
 .event_history .section_title img {
@@ -710,14 +710,14 @@ hr {
   font-size: 24px;
   margin: 10px 0 40px 0;
 }
-.modal-content .history_table table {
+.modal-content table {
   width: 100%;
   height: 100%;
 }
 
 .modal-content .history_table thead>tr:first-of-type,
 .modal-content .history_table tbody>tr:last-of-type {
-  border-bottom: 1px solid #ddd;
+  /*border-bottom: 1px solid #ddd;  Already, setting in the scrollbar option*/
 }
 
 .modal-content .history_table tr td {
@@ -761,7 +761,7 @@ hr {
 }
 
 .event_history table thead tr th:last-of-type {
-  text-align: right;
+  text-align: left;
 }
 
 .event_history table thead tr td:last-of-type {
@@ -788,7 +788,7 @@ hr {
 }
 
 .event_history table tbody tr td:last-of-type {
-  text-align: right;
+  text-align: left;
 }
 
 .event_history table tbody tr th {
@@ -797,7 +797,7 @@ hr {
   text-align: left;
 }
 
-#dataTable {
+.dataTable {
   min-width: 550px;
 }
 
@@ -828,7 +828,7 @@ hr {
   vertical-align: middle;
 }
 #dataTable tbody tr td:last-of-type {
-  text-align: right;
+  text-align: left;
 }
 #dataTable tbody tr:nth-of-type(even) {
   background-color: #f7f9fa;
@@ -837,6 +837,11 @@ hr {
 #dataTable tbody tr:last-of-type {
   border-bottom: 1px solid #e6e8ea;
 }
+
+/*#dataTable tbody tr td .dataTables_empty{*/
+  /*align-content: center;*/
+  /*text-align: center;*/
+/*}*/
 
 /* robot_chart */
 .robot_chart {
@@ -938,5 +943,22 @@ hr {
   border-bottom: 1px solid #e6e8ea;
 }
 
+/* Scroll Bar*/
+::-webkit-scrollbar{
+  width: 6px;
+  background-color: rgba(0,0,0,0.2);
+}
 
+::-webkit-scrollbar-thumb{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.1);
+  background-color: #ffffff;
+}
 
+.dataTables_scroll table tr td{
+
+}
+
+/* Chart Information */
+#chart_cnt h3{
+}

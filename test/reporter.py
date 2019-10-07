@@ -290,7 +290,7 @@ if __name__ == '__main__':
         print("Robot SerialNumber : ", shm.get_serial_number_value(shm))
         if f1 is True and f2 is True and sn:
             s = requests.Session()
-            s.post(URL + '/reporter/robot/info', json={'sn': ROBOT_SERIAL_NUMBER}, timeout=5)
+            s.post(URL + '/reporter/robot/info', json={'sn': ROBOT_SERIAL_NUMBER}, timeout=20)
             time.sleep(0.5)
             s.close()
             time.sleep(2.5)

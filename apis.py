@@ -56,14 +56,17 @@ def robots():
             for k, v in i.items():
                 if v is None:
                     i[k] = ''
-            # print("Rstate : ", cache.hget(i['sn'], 'state'))
-            if not cache.hget(i['sn'], 'state'): i['state'] = "<img src='../static/img/add.png' alt='btn_image' />"
+            robot_state(i['sn'])
+            print("Rstate [", i['sn'], "] :", cache.hget(i['sn'], 'state'))
+            if not cache.hget(i['sn'], 'state'): i['state'] = "<img src='../static/img/icon_stoppage.svg' alt='btn_image' />"
             else:
-                state = dict(cache.hget(i['sn'], 'state').decode())
-                if state['error'] > 0:
-                    pass # todo : 여기다가 error 상태에 따른 이미지 넣어야함.
+                state = eval(cache.hget(i['sn'], 'state').decode())
+                if state['error'] or state['collision'] > 0:
+                    i['state'] = "<img src='../static/img/icon_error_occurred.svg' alt='btn_image' />"
+                elif state['ready'] > 0 or state['busy'] > 0:
+                    i['state'] = "<img src='../static/img/icon_operation.svg' alt='btn_image' />"
                 else:
-                    i['state'] = "<img src='../static/img/pen.png' alt='btn_image' />"
+                    i['state'] = "<img src='../static/img/icon_stoppage.svg' alt='btn_image' />"
             i['kpi'] = i['kpi0'] + ', ' + i['kpi1'] + ', ' + i['kpi2'] + ', ' + i['kpi3'] + ', ' + i['kpi4']
             i['deploy'] = '<a href=/display?sn=%s>' \
                           '<img src="../static/img/icon_monitoring.svg" alt="download_menu" /></a>' % i['sn']
@@ -298,7 +301,7 @@ def robot_state(sn):
           "ORDER BY date DESC LIMIT 1 " \
           % (sn, (datetime.utcnow() - timedelta(seconds=30)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll))
     res = MySQL.select(sql, False)
-    print("State Loop Res : ", res)
+    print("State Loop Res [%s]: " % sn, res)
     if res is False:
         dic = str({'busy': 0, 'collision': 0, 'emergency': 0, 'error': 0, 'home': 0,
                    'finish': 0, 'ready': 0, 'resetting': 0, 'zero': 0, 'is_server_connected': 1})
@@ -318,7 +321,7 @@ def opdate(sn, axis=1, key='', period=''):
             sql = "SELECT DATE_FORMAT(CONVERT_TZ(MAX(x), '+00:00', '+09:00'), '%%m-%%d %%H:%%i') m, " \
                   "COUNT(y) from opdatas " \
                   "WHERE x >= \"%s\" AND x < \"%s\" AND serial_number = \"%s\" " \
-                  "GROUP BY ROUND(UNIX_TIMESTAMP(x) / 1500) ORDER BY m DESC LIMIT 10" \
+                  "GROUP BY ROUND(UNIX_TIMESTAMP(x) / 600) ORDER BY m DESC LIMIT 10" \
                   % ((datetime.utcnow() - timedelta(minutes=180)).strftime(fmtAll), datetime.utcnow().strftime(fmtAll), sn)
             res = MySQL.select(sql)
             # print("Res : ", res)
