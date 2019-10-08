@@ -1,4 +1,4 @@
-import sys, os, glob, json, time, signal, zipfile, requests, datetime, random
+import sys, os, glob, json, time, signal, zipfile, requests, datetime, random, requests.exceptions, http.client
 from multiprocessing import Process, Queue, set_start_method
 from indyShm_conf import *
 

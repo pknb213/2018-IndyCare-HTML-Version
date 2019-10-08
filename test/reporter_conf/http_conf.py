@@ -2,7 +2,8 @@ from sseclient import SSEClient
 import datetime, functools
 
 # URL = 'http://192.168.0.89:5005'
-URL = 'http://121.67.47.157:8881'
+# URL = 'http://121.67.47.15U
+URL = 'http://127.0.0.1:5005'
 
 
 def check_timing(func):

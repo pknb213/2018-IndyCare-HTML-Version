@@ -3,8 +3,8 @@ sys.path.append(os.getcwd() + os.path.sep + 'reporter_conf')
 from http_conf import *
 from util_conf import *
 from event_conf import *
-from indyShm_conf import *
-from reporterShm_conf import *
+# from indyShm_conf import *
+# from reporterShm_conf import *
 ROBOT_SERIAL_NUMBER = 'GLOBALTEST12'
 
 
@@ -187,9 +187,8 @@ def reporter(q, sn , shm):
 
 
 def event_log_uploader(sn):
-    print("Event Log Uploader Start")
-
     while True:
+        print("Event Log Uploader Start")
         s = requests.Session()
         # s.post(URL + '/login', {'id': sn, 'pwd': sn})
         try:
@@ -198,6 +197,35 @@ def event_log_uploader(sn):
             print("System Exception : ", e)
             s.close()
             sys.exit()
+        except requests.exceptions.ConnectionError as e:
+            t1 = t0 = datetime.datetime.now()
+            print("Connect Error !!", e)
+            while True:
+                print("<Event> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
+                try:
+                    res = s.post(URL + '/ping', timeout=15)
+                    print("Ping res :", res)
+                    if res.status_code == 200:
+                        print("<Event> Reconnected !!")
+                        flag = True
+                        break
+                except requests.exceptions.ConnectionError:
+                    flag = False
+                    time.sleep(5)
+                except Exception as e:
+                    print(e)
+                    time.sleep(2)
+                if t1.timestamp() - t0.timestamp() > 60:
+                    print("<Event> Session Time Over")
+                    s.close()
+                    time.sleep(1)
+                    s = requests.Session()
+                    t0 = datetime.datetime.now()
+                t1 = datetime.datetime.now()
+            if flag is True:
+                print("!!!!!!!!!!!!!!!!!!!!!!!")
+                s.close()
+                continue
         try:
             for msg in messages:
                 print("msg : ", msg.data)
@@ -206,9 +234,9 @@ def event_log_uploader(sn):
                     with open(EventFiles.get_directory_path() + data['filename'], 'rb') as f:
                         print(f)
                         res = s.post(URL + '/file/event/%s/%s' % (data['filename'], data['sn']), files={'file': f})
-        except requests.exceptions.ConnectionError as e:
+        except Exception as a:
+            print("Exception : ", a)
             t1 = t0 = datetime.datetime.now()
-            print("Connect Error !!", e)
             while True:
                 print("<Events> Reconnecting . . . ", t1.timestamp() - t0.timestamp())
                 try:
@@ -278,39 +306,39 @@ def clip_uploader(sn):
 
 if __name__ == '__main__':
     set_start_method('spawn', True)
-    shm = ReporterProcessState(REPORTER_PROCESS_SHM, REPORTER_PROCESS_STATE_ADDR, REPORTER_PROCESS_SHM_SIZE)
-
-    while True:
-        f1 = check_task_manager()
-        f2 = check_shm()
-        sn = check_robot_info()
-        shm.write_serial_number(shm, sn)
-        ROBOT_SERIAL_NUMBER = sn
-        print("Robot SerialNumber : ", shm.get_serial_number_value(shm))
-        if f1 is True and f2 is True and sn:
-            s = requests.Session()
-            s.post(URL + '/reporter/robot/info', json={'sn': ROBOT_SERIAL_NUMBER}, timeout=20)
-            time.sleep(0.5)
-            s.close()
-            time.sleep(2.5)
-            break
+    # shm = ReporterProcessState(REPORTER_PROCESS_SHM, REPORTER_PROCESS_STATE_ADDR, REPORTER_PROCESS_SHM_SIZE)
+    #
+    # while True:
+    #     f1 = check_task_manager()
+    #     f2 = check_shm()
+    #     sn = check_robot_info()
+    #     shm.write_serial_number(shm, sn)
+    #     ROBOT_SERIAL_NUMBER = sn
+    #     print("Robot SerialNumber : ", shm.get_serial_number_value(shm))
+    #     if f1 is True and f2 is True and sn:
+    #         s = requests.Session()
+    #         s.post(URL + '/reporter/robot/info', json={'sn': ROBOT_SERIAL_NUMBER}, timeout=20)
+    #         time.sleep(0.5)
+    #         s.close()
+    #         time.sleep(2.5)
+    #         break
 
     show_reporter_info()
     q = Queue()
     p1 = Process(target=event_log_uploader, args=(ROBOT_SERIAL_NUMBER,))
     p2 = Process(target=clip_uploader, args=(ROBOT_SERIAL_NUMBER,))
-    p3 = Process(target=task_server, args=(q, ROBOT_SERIAL_NUMBER,))
+    # p3 = Process(target=task_server, args=(q, ROBOT_SERIAL_NUMBER,))
     # p4 = Process(target=test_process, args=(ROBOT_SERIAL_NUMBER,))
     p1.start()
     p2.start()
-    p3.start()
+    # p3.start()
     # p4.start()
     time.sleep(1)
-    reporter(q, ROBOT_SERIAL_NUMBER, shm)
+    # reporter(q, ROBOT_SERIAL_NUMBER, shm)
     q.close()
     q.join_thread()
     # p4.join()
-    p3.join()
+    # p3.join()
     p2.join()
     p1.join()
 
