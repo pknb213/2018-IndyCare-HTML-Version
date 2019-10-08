@@ -20,7 +20,7 @@ cache = Redis(host=REDIS_URL, port=6379, db=0)
 cache.flushdb()
 print(cache.keys())
 
-INTERNAL_DATABASE = True  # Todo : True is AWS, False is Internal DB
+INTERNAL_DATABASE = False  # Todo : True is AWS, False is Internal DB
 
 DictCursor = pymysql.cursors.DictCursor
 

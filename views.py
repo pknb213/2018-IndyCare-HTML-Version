@@ -13,7 +13,7 @@ def home():
 
 
 @app.route("/display", methods=["GET"])
-def test():
+def display():
     # print(request.args)
     return render_template("display.html")
 

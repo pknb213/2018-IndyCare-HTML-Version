@@ -1,4 +1,4 @@
-# from posix_ipc import MessageQueue, SharedMemory, O_CREAT
+from posix_ipc import MessageQueue, SharedMemory, O_CREAT
 from os import read, write, lseek, SEEK_SET
 from struct import pack, unpack, calcsize
 

@@ -282,7 +282,8 @@ def get_event_file(filename, sn):
         t1 = datetime.now()
         print('Log Waiting', t1.timestamp() - t0.timestamp())
     load_sse_command(sn, '_event', {"fail": "저장된 Event 파일을 가져오는 것을 실패했습니다. ㅜㅁㅜ"})
-    return Response("Error ㅜㅜ", status=404)
+    return redirect(url_for("display", sn=sn))
+
 
 # Todo : Reporter Server API
 @app.route("/report/robot/state/<sn>", methods=["POST"])
