@@ -111,8 +111,8 @@ def reporter(q, sn , shm):
         else:
             break
 
-    s = requests.Session()
     while True:
+        s = requests.Session()
         #s.post(URL + '/login', {'id': sn, 'pwd': sn})
         t0 = datetime.datetime.now()
         # todo : About CONTY Alert
@@ -148,7 +148,7 @@ def reporter(q, sn , shm):
             # state_idc.update(info_shm.get_all_robot_info_data(info_shm))
             state_idc.update(reporter_shm.get_all_reporter_state(reporter_shm))
             # state_idc.update(sys_shm.get_all_sys_state(sys_shm))
-            s.post(URL + '/report/robot/state/' + sn, json=state_idc)
+            s.post(URL + '/report/robot/state/' + sn, json=state_idc, timeout=10)
 
             print("\nReporter : ", t0, shm.get_all_reporter_state(shm))
             print(state_idc, "\n")
@@ -159,8 +159,8 @@ def reporter(q, sn , shm):
                 date = str(datetime.datetime.strptime(log_file[12:-4], '%m-%d-%Y-%H-%M-%S'))
                 code = int(log_file[:2])
                 print(date)
-                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log})
-            time.sleep(2)
+                s.post(URL + '/event/' + sn, json={"time": date, "code": code, "log": EventFiles.latest_log}, timeout=30)
+            time.sleep(4)
         except requests.exceptions.ConnectionError as e:
             t1 = t0 = datetime.datetime.now()
             print("Connect Error !!", e)
@@ -184,6 +184,14 @@ def reporter(q, sn , shm):
                     s = requests.Session()
                     t0 = datetime.datetime.now()
                 t1 = datetime.datetime.now()
+            s.close()
+            time.sleep(1)
+            continue
+        except Exception as e:
+            print("<Reporter Exception !> ", e)
+            s.close()
+            time.sleep(2)
+            continue
 
 
 def event_log_uploader(sn):
@@ -220,6 +228,7 @@ def event_log_uploader(sn):
                     t0 = datetime.datetime.now()
                 t1 = datetime.datetime.now()
             s.close()
+            time.sleep(1)
             continue
         try:
             for msg in messages:
@@ -253,7 +262,9 @@ def event_log_uploader(sn):
                                 t1 = datetime.datetime.now()
         except Exception as e:
             print("<Event Exception !> ", e)
+            s.close()
             time.sleep(2)
+            continue
 
 
 def clip_uploader(sn):
@@ -289,6 +300,7 @@ def clip_uploader(sn):
                     t0 = datetime.datetime.now()
                 t1 = datetime.datetime.now()
             s.close()
+            time.sleep(1)
             continue
         try:
             for msg in messages:
@@ -311,7 +323,7 @@ def clip_uploader(sn):
                             res = s.post(URL + '/clip/' + sn + '/check', files={'file': f})
                     else:
                         res = s.post(URL + '/clip/' + sn + '/check', files={'file': ('No Camera', '')})
-                    if res.status_code == 200 or res == 'ok':
+                    if res.status_code == 200:
                         print("<Clip> Reconnected !!")
                         break
                 except requests.exceptions.ConnectionError:
@@ -325,7 +337,9 @@ def clip_uploader(sn):
                 t1 = datetime.datetime.now()
         except Exception as e:
             print("<Event Exception !> ", e)
+            s.close()
             time.sleep(2)
+            continue
 
 
 if __name__ == '__main__':
