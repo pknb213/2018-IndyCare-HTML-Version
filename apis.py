@@ -389,7 +389,7 @@ def opdate(sn, axis=1, key='', period=''):
                   "VALUES (\"%s\", \"%s\", \"%s\") " % (request.json['msg'], request.json['mdata'], sn)
             MySQL.insert(sql)
         elif request.json['mtype'] is 2:
-            print(request.json, len(request.json['mdata']))
+            # print(request.json, len(request.json['mdata']))
             if len(request.json['mdata']) == 1:
                 sql = 'INSERT INTO analog_opdatas(msg, serial_number, y) VALUES (\"%s\", \"%s\", \"%s\") ' \
                       % (request.json['msg'], sn, request.json['mdata'])
